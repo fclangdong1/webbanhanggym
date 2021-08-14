@@ -1,7 +1,7 @@
 @extends('layout')
 @section('content')
 <!-- *********************** Start Banner ***************** -->
-<!-- <div class="banner" style="background: white;">
+<div class="banner" style="background: white;">
     <div class="house owl-carousel owl-theme container" id="banner-slider">
         <div class="item">
             <img src="{{URL::to('frontend/img/bannergym3.png')}}" alt="">
@@ -39,136 +39,103 @@
             </div>
         </div>
     </div>
-</div> -->
+</div>
 <!-- *********************** End Banner ***************** -->
 <section>
-    <div class="payment-cart">
+    <div class="cart-shopping">
         <div class="container">
+            <h2>Giỏ Hàng Của Bạn</h2>
             <div class="row">
-                <h4>Thông Tin Giao Hàng</h4>
-                <form action="{{URL::to('/save-checkout-customer')}}" method="post" class="flex payment-two">
-                    {{csrf_field()}}
-                    @foreach( $all_user as $key => $name_user)
-                    <div class="col-md-6 payment-left">
-                        <input class="payment-home" type="text" name="shipping_email" id="" placeholder="Điền email" value="{{$name_user->email}}">
-                        @if ($errors->has('shipping_email'))
-                        <span style="color: red; font-weight: 700;">{{$errors->first('shipping_email')}}</span>
-                        @endif
-                        <input class="payment-home" type="text" name="shipping_name" id="" placeholder="Họ & Tên" value="{{$name_user->fullname}}">
-                        @if ($errors->has('shipping_name'))
-                        <span style="color: red; font-weight: 700;">{{$errors->first('shipping_name')}}</span>
-                        @endif
-                        <input class="payment-home" type="text" name="shipping_phone" id="" placeholder="Số Điện Thoại" value="{{'0'.($name_user->phone)}}">
-                        @if ($errors->has('shipping_phone'))
-                        <span style="color: red; font-weight: 700;">{{$errors->first('shipping_phone')}}</span>
-                        @endif
-                        <input class="payment-home" type="text" name="shipping_address" id="" placeholder="Địa chỉ cụ thể" value="{{$name_user->address}}">
-                        @if ($errors->has('shipping_address'))
-                        <span style="color: red; font-weight: 700;">{{$errors->first('shipping_address')}}</span>
-                        @endif
-                        <textarea class="payment-home" name="shipping_note" id="" rows="5" placeholder="Ghi chú đơn hàng của bạn"></textarea>
-                    </div>
-                    @endforeach
-                    <div class="col-md-6 payment-right">
-                        <!-- <div class="form-group">
-                            <label for="">Chọn Thành Phố</label>
-                            <select name="" id="" class="form-control input-sm m-bot15 choose city">
-                                <option value="">--Chọn Thành Phố-- </option>
-                                <option value="">hà nội1 </option>
-                            </select>
+                <div class="cart-left col-xl-8 col-lg-8 col-md-7 col-12">
+                    <form action="{{URL::to('/update-cart')}}" method="POST">
+                        @csrf
+                        <div class="cart-left-form">
+                            <table class="shop-table">
+                                <thead>
+                                    <tr class="cart_items">
+                                        <th class="product-name" colspan="3">Sản Phẩm</th>
+                                        <th class="product-price">Giá</th>
+                                        <th class="product-quantity" style="width: 9rem;">Số Lượng</th>
+                                        <th class="product-subtotal">Tạm Tính</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                    $total = 0;
+                                    @endphp
+                                    @if(Session::get('cart')==true)
+                                    @foreach(Session::get('cart') as $key => $cart)
+                                    @php
+                                    $subtotal = $cart['product_price']*$cart['product_qty'];
+                                    $total+=$subtotal;
+                                    @endphp
+                                    <tr>
+                                        <td class="product-remove"><a href="{{URL::to('/del-product/'.$cart['session_id'])}}">X</a></td>
+                                        <td class="product-thumbnail"> <a href=""><img style="width: 100px; height:130px;" src="{{URL::to('uploads/product/'.$cart['product_image'])}}" alt=""></a></td>
+                                        <td class="product-thumbnail"> <a href="">{{$cart['product_name']}}</a></td>
+                                        <td class="product-price">
+                                            <span class="price">{{number_format($cart['product_price'],0,',','.')}}VNĐ</span>
+                                        </td>
+                                        <td class="amount">
+                                            <input type="number" value="{{$cart['product_qty']}}" min="1" max="{{$cart['product_quantity']}}" class="cart_quantity" name="cart_qty[{{$cart['session_id']}}]" id="">
+                                            <input type="hidden" name="rowId_cart" class="form-control" value="">
+                                        </td>
+                                        <td class="product-subtotal" data-title="tạm tính">
+                                            <span class="total-price">
+                                                {{number_format($subtotal,0,',','.')}}VNĐ
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                    @else
+                                    @endif
+
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="form-group">
-                            <label for="">Chọn quận huyện</label>
-                            <select name="" id="" class="form-control input-sm m-bot15 choose city">
-                                <option value="">--Chọn quận huyện-- </option>
-                                <option value="">sơn tây </option>
-                            </select>
+
+                        <div class="home-menu flex" style="align-items: center; justify-content: space-between;">
+                            <div class="left">
+                                <a href="{{URL::to('/trang-chu')}}"><i class="fas fa-angle-double-left"></i> Tiếp Tục Mua Hàng</a>
+                            </div>
+                            <div class="right">
+                                <!-- <a href=""><i class="fab fa-angellist"></i> Cập Nhập Giỏ Hàng</a> -->
+                                <input type="submit" name="update_qty" value="Cập Nhập Giỏ Hàng">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="">Chọn xã phường</label>
-                            <select name="" id="" class="form-control input-sm m-bot15 choose city">
-                                <option value="">--Chọn Phường Xã-- </option>
-                                <option value="">phường 6 </option>
-                            </select>
-                        </div> -->
+                    </form>
 
+                </div>
+                <div class="cart-right col-xl-4 col-lg-4 col-md-5 col-12">
+                    <div class="cart-total">
+                        <table cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th class="product-name" colspan="2" style="border-width:3px;">Thông Tin Đơn Hàng
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <!-- <h2>Thông Tin Đơn Hàng</h2> -->
+                        <table cellspacing="0" class="shop_table" style="width:100%">
 
-                        <!-- <table cellspacing="0" class="shop_table-one" style="line-height: 3rem;">
-                            <tbody>
-                                <tr class="cart-subtotal-one">
-                                    <th>Tạm tính :</th>
-                                    <td data-title="Tạm tính">
-                                        <span></span>
-                                    </td>
-                                </tr>
-                                <tr class="cart-subtotal-one ">
-                                    <th>Phí Giao Hàng :</th>
-                                    <td data-title="Tạm tính">
-                                        <span>Free</span>
-                                    </td>
-                                </tr>
-                                @if(Session::get('coupon_code'))
-                                @foreach(Session::get('coupon_code') as $key => $cou)
-                                <tr class="cart-subtotal-one ">
-                                    <th>Giảm Giá:</th>
-                                    <td data-title="Tạm tính">
-                                        <span class="amount">
-                                            {{$cou['coupon_condition']}}VNĐ
-                                        </span>
-                                    </td>
-                                </tr>
-                                @endforeach
-                                @else
-                                <tr class="cart-subtotal-one ">
-                                    <th>Giảm Giá:</th>
-                                    <td data-title="Tạm tính">
-                                        <span class="amount">
-                                            0 VNĐ
-                                        </span>
-                                    </td>
-                                </tr>
-                                @endif
-                                <tr class="cart-subtotal-one">
-                                    <th>Tổng :</th>
-                                    <td data-title="Tạm tính">
-                                        <span class="amount">
-
-                                        </span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table> -->
-                        <!-- //test -->
-                        <table cellspacing="0" class="shop_table-one" style="line-height: 3rem;">
-                            @php
-                            $total = 0;
-                            @endphp
-                            @if(Session::get('cart')==true)
-                            @foreach(Session::get('cart') as $key => $cart)
-                            @php
-                            $subtotal = $cart['product_price']*$cart['product_qty'];
-                            $total+=$subtotal;
-                            @endphp
-                            @endforeach
-                            @else
-                            @endif
                             <tbody>
                                 @if(Session::get('coupon_code'))
                                 @foreach(Session::get('coupon_code') as $key => $cou)
                                 @if($cou['coupon_condition']==1)
-                                <tr class="cart-subtotal-one">
+                                <tr class="cart-subtotal">
                                     <th>Tạm tính :</th>
                                     <td data-title="Tạm tính">
                                         <span class="amount"> {{number_format($total,0,',','.')}}VNĐ</span>
                                     </td>
                                 </tr>
-                                <tr class="cart-subtotal-one">
+                                <tr class="shipping ">
                                     <th>Phí Giao Hàng :</th>
                                     <td data-title="Tạm tính">
                                         <span class="amount">Free</span>
                                     </td>
                                 </tr>
-                                <tr class="cart-subtotal-one ">
+                                <tr class="shipping ">
                                     <th>Giảm Giá :
                                         @if(Session::get('coupon_code'))
 
@@ -184,7 +151,7 @@
                                             @endphp</span>
                                     </td>
                                 </tr>
-                                <tr class="cart-subtotal-one">
+                                <tr class="cart-subtotal">
                                     <th>Tổng :</th>
                                     <td data-title="Tạm tính">
                                         <span class="amount">
@@ -193,19 +160,19 @@
                                     </td>
                                 </tr>
                                 @elseif($cou['coupon_condition']==2)
-                                <tr class="cart-subtotal-one">
+                                <tr class="cart-subtotal">
                                     <th>Tạm tính :</th>
                                     <td data-title="Tạm tính">
                                         <span class="amount"> {{number_format($total,0,',','.')}}VNĐ</span>
                                     </td>
                                 </tr>
-                                <tr class="cart-subtotal-one ">
+                                <tr class="shipping ">
                                     <th>Phí Giao Hàng :</th>
                                     <td data-title="Tạm tính">
                                         <span class="amount">Free</span>
                                     </td>
                                 </tr>
-                                <tr class="cart-subtotal-one ">
+                                <tr class="shipping ">
                                     <th>Giảm Giá :
                                         @if(Session::get('coupon_code'))
                                         <a class="btn btn-default check_out" href="{{URL::to('/unset-coupon')}}"><i style="color: red;" class="fas fa-trash-alt"></i></a>
@@ -219,7 +186,7 @@
                                             @endphp</span>
                                     </td>
                                 </tr>
-                                <tr class="cart-subtotal-one">
+                                <tr class="cart-subtotal">
                                     <th>Tổng :</th>
                                     <td data-title="Tạm tính">
                                         <span class="amount">
@@ -231,19 +198,19 @@
                                 @endif
                                 @endforeach
                                 @else
-                                <tr class="cart-subtotal-one">
+                                <tr class="cart-subtotal">
                                     <th>Tạm tính :</th>
                                     <td data-title="Tạm tính">
                                         <span class="amount"> {{number_format($total,0,',','.')}}VNĐ</span>
                                     </td>
                                 </tr>
-                                <tr class="cart-subtotal-one ">
+                                <tr class="shipping ">
                                     <th>Phí Giao Hàng :</th>
                                     <td data-title="Tạm tính">
                                         <span class="amount">Free</span>
                                     </td>
                                 </tr>
-                                <tr class="cart-subtotal-one ">
+                                <tr class="shipping ">
                                     <th>Giảm Giá :
 
                                     </th>
@@ -252,7 +219,7 @@
                                         </span>
                                     </td>
                                 </tr>
-                                <tr class="cart-subtotal-one">
+                                <tr class="cart-subtotal">
                                     <th>Tổng :</th>
                                     <td data-title="Tạm tính">
                                         <span class="amount">
@@ -262,14 +229,42 @@
                                 </tr>
                                 @endif
                             </tbody>
+
                         </table>
-                        <!-- //test -->
-                        <div class="submit-agileits">
-                            <input type="submit" name="send_order" value="Tiếp Tục Thanh Toán">
+                        <div class="payment">
+                            <?php
+                            $user_id = Session::get('id_users');
+                            if ($user_id != NULL) {
+                            ?>
+                                <a class="checkout-button button" href="{{URL::to('/checkout')}}">Tiến Hành Thanh Toán</a>
+                            <?php
+                            } else {
+                            ?>
+
+                                <a class="checkout-button button" href="{{URL::to('/login-checkout')}}">Tiến Hành Thanh Toán</a>
+                            <?php
+                            }
+                            ?>
                         </div>
                     </div>
-                </form>
-
+                    @if(session()->has('message'))
+                    <div class="alert alert-success">
+                        {!! session()->get('message') !!}
+                    </div>
+                    @elseif(session()->has('error'))
+                    <div class="alert alert-danger">
+                        {!! session()->get('error') !!}
+                    </div>
+                    @endif
+                    <form class="checkout_coupon mb-0" method="GET" action="{{URL::to('/check-coupon')}}">
+                        @csrf
+                        <div class="coupon">
+                            <p class="widget-title"><i class="fas fa-tags"></i> Mã Giảm Giá</p>
+                        </div>
+                        <input type="text" name="coupon_code" id="coupon_code" class="input-text" placeholder="Mã ưu đãi">
+                        <input type="submit" value="ÁP DỤNG" name="check_coupon" class="is-form expand check_coupon">
+                    </form>
+                </div>
             </div>
         </div>
     </div>

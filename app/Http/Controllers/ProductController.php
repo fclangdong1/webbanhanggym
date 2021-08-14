@@ -22,6 +22,15 @@ use Illuminate\Support\Facades\Redirect;
 
 class ProductController extends Controller
 {
+    public function AuthLogin()
+    {
+        $admin_id = Session::get('id_users');
+        if ($admin_id != null) {
+            return Redirect::to('dashboard');
+        } else {
+            return Redirect::to('admin')->send();
+        }
+    }
     public function send_comment(Request $request)
     {
         $product_id = $request->product_id;

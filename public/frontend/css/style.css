@@ -870,6 +870,7 @@ section .shop-section-content .container .row .tab .tab-content .item-container 
 section .shop-section-content .container .row .tab .tab-content .item-container .item-products:hover .text-products .addtocart {
 	z-index: 10;
 	bottom: 0;
+	display: flex;
 	cursor: pointer;
 	transition: all .4s;
 }
@@ -934,6 +935,7 @@ section .shop-section-content .container .row .tab .tab-content .item-container 
 	position: absolute;
 	bottom: -10px;
 	left: 0;
+	display: flex;
 	visibility: hidden;
 	width: 100%;
 	padding: 0 15px 15px;
@@ -941,13 +943,13 @@ section .shop-section-content .container .row .tab .tab-content .item-container 
 	background-color: #fff;
 }
 
-section .shop-section-content .container .row .tab .tab-content .item-container .item-products .text-products .addtocart .shopping {
+section .shop-section-content .container .row .tab .tab-content .item-container .item-products .text-products .addtocart .shopping .add-to-cart {
 	padding: 7px 18px;
 	border: 1px solid #c0afaf;
 	border-radius: 1px;
 }
 
-section .shop-section-content .container .row .tab .tab-content .item-container .item-products .text-products .addtocart .shopping:hover {
+section .shop-section-content .container .row .tab .tab-content .item-container .item-products .text-products .addtocart .shopping .add-to-cart:hover {
 	font-weight: 300;
 	color: white;
 	border: 1px solid #ff6801;
@@ -1147,13 +1149,13 @@ section .category-list .container .row .category .category-section .row .item-ca
 	background-color: #fff;
 }
 
-section .category-list .container .row .category .category-section .row .item-category .text-products .addtocart .shopping {
+section .category-list .container .row .category .category-section .row .item-category .text-products .addtocart .shopping .add-to-cart {
 	padding: 7px 18px;
 	border: 1px solid #c0afaf;
 	border-radius: 1px;
 }
 
-section .category-list .container .row .category .category-section .row .item-category .text-products .addtocart .shopping:hover {
+section .category-list .container .row .category .category-section .row .item-category .text-products .addtocart .shopping .add-to-cart:hover {
 	font-weight: 300;
 	color: white;
 	border: 1px solid #ff6801;

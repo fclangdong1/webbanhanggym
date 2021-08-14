@@ -22,28 +22,36 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($content as $v_content)
+                                    @php
+                                    $total = 0;
+                                    @endphp
+                                    @if(Session::get('cart')==true)
+                                    @foreach(Session::get('cart') as $key => $cart)
+                                    @php
+                                    $subtotal = $cart['product_price']*$cart['product_qty'];
+                                    $total+=$subtotal;
+                                    @endphp
                                     <tr>
-                                        <td class="product"><a href=""></a></td>
-                                        <td class="product-thumbnail"> <a href=""><img style="width: 100px; height:130px;" src="{{URL::to('uploads/product/'.$v_content->options->image)}}" alt=""></a></td>
-                                        <td class="product-thumbnail"> <a href="">{{ $v_content->name}}</a></td>
+                                        <td class="product-remove"><a href="{{URL::to('/del-product/'.$cart['session_id'])}}">X</a></td>
+                                        <td class="product-thumbnail"> <a href=""><img style="width: 100px; height:130px;" src="{{URL::to('uploads/product/'.$cart['product_image'])}}" alt=""></a></td>
+                                        <td class="product-thumbnail"> <a href="">{{$cart['product_name']}}</a></td>
                                         <td class="product-price">
-                                            <span class="price">{{ number_format($v_content->price).' '.'VNĐ'}}</span>
+                                            <span class="price">{{number_format($cart['product_price'],0,',','.')}}VNĐ</span>
                                         </td>
                                         <td class="amount">
-                                            <input type="number" value="{{ $v_content->qty}}" class="cart_quantity" name="sldvsl" id="">
-                                            <input type="hidden" name="rowId_cart" class="form-control" value="{{ $v_content->rowId}}">
+                                            <input type="number" value="{{$cart['product_qty']}}" min="1" max="{{$cart['product_quantity']}}" class="cart_quantity" name="cart_qty[{{$cart['session_id']}}]" id="">
+                                            <input type="hidden" name="rowId_cart" class="form-control" value="">
                                         </td>
                                         <td class="product-subtotal" data-title="tạm tính">
                                             <span class="total-price">
-                                                <?php
-                                                $subtotal = $v_content->price * $v_content->qty;
-                                                echo  number_format($subtotal) . ' ' . 'VNĐ';
-                                                ?>
+                                                {{number_format($subtotal,0,',','.')}}VNĐ
                                             </span>
                                         </td>
                                     </tr>
                                     @endforeach
+                                    @else
+                                    @endif
+
                                 </tbody>
                             </table>
                         </div>
@@ -74,12 +82,13 @@
                         <!-- <h2>Thông Tin Đơn Hàng</h2> -->
                         <table cellspacing="0" class="shop_table" style="width:100%">
                             <tbody style="line-height: 1.5rem;">
+                                @foreach($id_shipping as $key => $shipping)
                                 <tr class="cart-subtotal">
                                     <th>Họ Tên :</th>
 
                                 </tr>
                                 <tr class="shipping ">
-                                    <th style="font-weight: 300;">Phan Văn Hà</th>
+                                    <th style="font-weight: 300; text-transform:uppercase;">{{$shipping->shipping_name}}</th>
                                     <td data-title="Tạm tính">
                                         <span class="amount">
                                             <!-- A8 khu cảnh vệ đường man thiện phường tăng nhơn phú a quận 9 -->
@@ -91,7 +100,7 @@
 
                                 </tr>
                                 <tr class="cart-subtotal">
-                                    <th style="font-weight: 300;">A8 khu cảnh vệ đường man thiện phường tăng nhơn phú a quận 9</th>
+                                    <th style="font-weight: 300;">{{$shipping->shipping_address}}</th>
 
                                 </tr>
                                 <tr class="shipping ">
@@ -99,17 +108,42 @@
 
                                 </tr>
                                 <tr class="cart-subtotal">
-                                    <th style="font-weight: 300;">0974135239</th>
+                                    <th style="font-weight: 300;">0{{$shipping->shipping_phone}}</th>
 
                                 </tr>
                                 <tr class="shipping ">
                                     <th>Tổng Tiền</th>
 
                                 </tr>
+                                @endforeach
+                                @if(Session::get('coupon_code'))
+                                @foreach(Session::get('coupon_code') as $key => $cou)
+                                @if($cou['coupon_condition']==1)
                                 <tr class="cart-subtotal">
-                                    <th style="font-weight: 300;">{{Cart::priceTotal().' '.'VNĐ'}}</th>
-
+                                    <th style="font-weight: 300;">
+                                        @php
+                                        $total_coupon= ($total*$cou['coupon_number'])/100;
+                                        echo '
+                                        '.number_format($total- $total_coupon,0,',','.').' VNĐ';
+                                        @endphp
+                                    </th>
                                 </tr>
+                                @elseif($cou['coupon_condition']==2)
+                                <tr class="cart-subtotal">
+                                    <th style="font-weight: 300;">@php
+                                        $total_coupon= $cou['coupon_number'];
+                                        echo '
+                                        '.number_format( $total-$total_coupon,0,',','.').' VNĐ';
+                                        @endphp
+                                    </th>
+                                </tr>
+                                @endif
+                                @endforeach
+                                @else
+                                <tr class="cart-subtotal">
+                                    <th style="font-weight: 300;">{{number_format($total,0,',','.')}} VNĐ</th>
+                                </tr>
+                                @endif
                             </tbody>
                         </table>
                         <form action="{{URL::to('/order-place')}}" method="post">

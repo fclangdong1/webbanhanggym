@@ -174,19 +174,71 @@ Route::post('save-cart', [
 	'as' => 'save-cart',
 	'uses' => 'App\Http\Controllers\CartController@save_cart'
 ]);
+Route::post('add-cart-ajax', [
+	'as' => 'add-cart-ajax',
+	'uses' => 'App\Http\Controllers\CartController@add_cart_ajax'
+]);
+Route::get('gio-hang', [
+	'as' => 'gio-hang',
+	'uses' => 'App\Http\Controllers\CartController@gio_hang'
+]);
 Route::post('update-cart-quantity', [
 	'as' => 'update-cart-quantity',
 	'uses' => 'App\Http\Controllers\CartController@update_cart_quantity'
+]);
+Route::post('update-cart', [
+	'as' => 'update-cart',
+	'uses' => 'App\Http\Controllers\CartController@update_cart'
 ]);
 Route::get('show-cart', [
 	'as' => 'show-cart',
 	'uses' => 'App\Http\Controllers\CartController@show_cart'
 ]);
+// xóa sapr phẩm trong giỏ hàng
 Route::get('delete-to-cart/{rowId}', [
 	'as' => 'delete-to-cart/{rowId}',
 	'uses' => 'App\Http\Controllers\CartController@delete_to_cart'
 ]);
+// end xóa sanr phẩm trong giỏ hàng
+// xóa sanr phẩm trong giỏ hàng
+Route::get('del-product/{session_id}', [
+	'as' => 'del-product/{session_id}',
+	'uses' => 'App\Http\Controllers\CartController@del_product'
+]);
+// end xóa sanr phẩm trong giỏ hàng
 
+
+// tinh phi khuyen mai
+Route::get('check-coupon', [
+	'as' => 'check-coupon',
+	'uses' => 'App\Http\Controllers\CartController@check_coupon'
+]);
+// xóa mã khuyến mãi khách hàng
+Route::get('unset-coupon', [
+	'as' => 'unset-coupon',
+	'uses' => 'App\Http\Controllers\CartController@unset_coupon'
+]);
+// trong trang admin
+// thêm mã giảm giá
+Route::get('insert-coupon', [
+	'as' => 'insert-coupon',
+	'uses' => 'App\Http\Controllers\CouponController@insert_coupon'
+]);
+// show danh sách mã giảm giá
+Route::get('list-coupon', [
+	'as' => 'list-coupon',
+	'uses' => 'App\Http\Controllers\CouponController@list_coupon'
+]);
+// xóa mã giảm giá
+Route::get('delete-coupon/{id_coupon}', [
+	'as' => 'delete-coupon/{id_coupon}',
+	'uses' => 'App\Http\Controllers\CouponController@delete_coupon'
+]);
+
+Route::get('insert-coupon-code', [
+	'as' => 'insert-coupon-code',
+	'uses' => 'App\Http\Controllers\CouponController@insert_coupon_code'
+]);
 // Hồ sơ khách hàng
 Route::get('show-user', [
 	'as' => 'show-user',

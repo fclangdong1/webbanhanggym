@@ -115,132 +115,198 @@
                         </div>
                         <div class="tab-content tabs">
                             <div class="item-container active" id="boys">
-                                <div class="row">
-                                    @foreach($all_product_boy as $key=> $product)
-                                    <div class="item-products col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12">
-                                        <div class="images-products">
-                                            <a href="{{URL::to('/chi-tiet-san-pham/'.$product->id_products)}}">
-                                                <img class="image-one" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
-                                                <img class="image-two" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
-                                            </a>
-                                            <div class="love">
-                                                <div class="love-one">
-                                                    <i class="far fa-heart"></i>
-                                                </div>
-                                            </div>
-                                            <div class="views">
-                                                <div class="views-one">
-                                                    <i class="far fa-eye"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="text-products">
-                                            <h3><a href="">{{$product->product_name}}</a></h3>
-                                            <!-- <p> Mã số: 0020234</p> -->
-                                            <div class="price-item">
-                                                <span class="price">{{number_format($product->product_price).' VNĐ'}}</span>
-                                                <!-- <span class="price-discount">195,000đ </span> -->
-                                            </div>
+                                <form method="POST">
+                                    @csrf
+                                    <div class="row">
+                                        @foreach($all_product_boy as $key=> $product)
 
-                                            <div class="addtocart">
-                                                <div class="shopping">
-                                                    <i class="fas fa-shopping-cart"></i>
-                                                    <span>ADD TO CART</span>
+                                        <input type="hidden" value="{{$product->id_products}}" class="cart_product_id_{{$product->id_products}}">
+
+                                        <input type="hidden" id="wishlist_productname{{$product->id_products}}" value="{{$product->product_name}}" class="cart_product_name_{{$product->id_products}}">
+
+                                        <input type="hidden" value="{{$product->product_quantity}}" class="cart_product_quantity_{{$product->id_products}}">
+
+                                        <input type="hidden" value="{{$product->product_image}}" class="cart_product_image_{{$product->id_products}}">
+
+                                        <input type="hidden" id="wishlist_productprice{{$product->id_products}}" value="{{number_format($product->product_price,0,',','.')}}VNĐ">
+
+                                        <input type="hidden" value="{{$product->product_price}}" class="cart_product_price_{{$product->id_products}}">
+
+                                        <input type="hidden" value="1" class="cart_product_qty_{{$product->id_products}}">
+                                        <div class="item-products col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12">
+                                            <div class="images-products">
+                                                <a href="{{URL::to('/chi-tiet-san-pham/'.$product->id_products)}}">
+                                                    <img class="image-one" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
+                                                    <img class="image-two" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
+                                                </a>
+                                                <div class="love">
+                                                    <div class="love-one">
+                                                        <i class="far fa-heart"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="views">
+                                                    <div class="views-one">
+                                                        <i class="far fa-eye"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-products">
+                                                <h3><a href="">{{$product->product_name}}</a></h3>
+                                                <!-- <p> Mã số: 0020234</p> -->
+                                                <div class="price-item">
+                                                    <span class="price">{{number_format($product->product_price).' VNĐ'}}</span>
+                                                    <!-- <span class="price-discount">195,000đ </span> -->
+                                                </div>
+
+                                                <div class="addtocart">
+                                                    <div class="shopping">
+                                                        <button type="button" data-id_product="{{$product->id_products}}" name="add-to-cart" class="btn add-to-cart"> <i class="fas fa-shopping-cart"></i> ADD TO
+                                                            CART</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+
+                                        @endforeach
                                     </div>
-                                    @endforeach
-                                </div>
+                                </form>
                             </div>
                             <div class="item-container" id="girls">
-                                <div class="row">
-                                    @foreach($all_product_girl as $key=> $product)
-                                    <div class="item-products col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12">
-                                        <div class="images-products">
-                                            <a href="{{URL::to('/chi-tiet-san-pham/'.$product->id_products)}}">
-                                                <img class="image-one" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
-                                                <img class="image-two" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
-                                            </a>
-                                            <div class="love">
-                                                <div class="love-one">
-                                                    <i class="far fa-heart"></i>
-                                                </div>
-                                            </div>
-                                            <div class="views">
-                                                <div class="views-one">
-                                                    <i class="far fa-eye"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="text-products">
-                                            <h3><a href="">{{$product->product_name}}</a></h3>
-                                            <!-- <p> Mã số: 0020234</p> -->
-                                            <div class="price-item">
-                                                <span class="price">{{number_format($product->product_price).' VNĐ'}}</span>
-                                                <!-- <span class="price-discount">195,000đ </span> -->
-                                            </div>
+                                <form method="POST">
+                                    @csrf
+                                    <div class="row">
+                                        @foreach($all_product_girl as $key=> $product)
+                                        <input type="hidden" value="{{$product->id_products}}" class="cart_product_id_{{$product->id_products}}">
 
-                                            <div class="addtocart">
-                                                <div class="shopping">
-                                                    <i class="fas fa-shopping-cart"></i>
-                                                    <span>ADD TO CART</span>
+                                        <input type="hidden" id="wishlist_productname{{$product->id_products}}" value="{{$product->product_name}}" class="cart_product_name_{{$product->id_products}}">
+
+                                        <input type="hidden" value="{{$product->product_quantity}}" class="cart_product_quantity_{{$product->id_products}}">
+
+                                        <input type="hidden" value="{{$product->product_image}}" class="cart_product_image_{{$product->id_products}}">
+
+                                        <input type="hidden" id="wishlist_productprice{{$product->id_products}}" value="{{number_format($product->product_price,0,',','.')}}VNĐ">
+
+                                        <input type="hidden" value="{{$product->product_price}}" class="cart_product_price_{{$product->id_products}}">
+
+                                        <input type="hidden" value="1" class="cart_product_qty_{{$product->id_products}}">
+                                        <div class="item-products col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12">
+
+                                            <div class="images-products">
+                                                <a href="{{URL::to('/chi-tiet-san-pham/'.$product->id_products)}}">
+                                                    <img class="image-one" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
+                                                    <img class="image-two" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
+                                                </a>
+                                                <div class="love">
+                                                    <div class="love-one">
+                                                        <i class="far fa-heart"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="views">
+                                                    <div class="views-one">
+                                                        <i class="far fa-eye"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-products">
+                                                <h3><a href="">{{$product->product_name}}</a></h3>
+                                                <!-- <p> Mã số: 0020234</p> -->
+                                                <div class="price-item">
+                                                    <span class="price">{{number_format($product->product_price).' VNĐ'}}</span>
+                                                    <!-- <span class="price-discount">195,000đ </span> -->
+                                                </div>
+
+                                                <div class="addtocart">
+                                                    <div class="shopping">
+                                                        <button type="button" data-id_product="{{$product->id_products}}" name="add-to-cart" class="btn add-to-cart"> <i class="fas fa-shopping-cart"></i> ADD TO
+                                                            CART</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        @endforeach
                                     </div>
-                                    @endforeach
-                                </div>
+                                </form>
                             </div>
                             <div class="item-container" id="kids">
-                                <div class="row">
-                                    @foreach($all_product_wife as $key=> $product)
-                                    <div class="item-products col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12">
-                                        <div class="images-products">
-                                            <a href="{{URL::to('/chi-tiet-san-pham/'.$product->id_products)}}">
-                                                <img class="image-one" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
-                                                <img class="image-two" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
-                                            </a>
-                                            <div class="love">
-                                                <div class="love-one">
-                                                    <i class="far fa-heart"></i>
-                                                </div>
-                                            </div>
-                                            <div class="views">
-                                                <div class="views-one">
-                                                    <i class="far fa-eye"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="text-products">
-                                            <h3><a href="">{{$product->product_name}}</a></h3>
-                                            <!-- <p> Mã số: 0020234</p> -->
-                                            <div class="price-item">
-                                                <span class="price">{{number_format($product->product_price).' VNĐ'}}</span>
-                                                <!-- <span class="price-discount">195,000đ </span> -->
-                                            </div>
+                                <form method="POST">
+                                    @csrf
+                                    <div class="row">
+                                        @foreach($all_product_wife as $key=> $product)
+                                        <input type="hidden" value="{{$product->id_products}}" class="cart_product_id_{{$product->id_products}}">
 
-                                            <div class="addtocart">
-                                                <div class="shopping">
-                                                    <i class="fas fa-shopping-cart"></i>
-                                                    <span>ADD TO CART</span>
+                                        <input type="hidden" id="wishlist_productname{{$product->id_products}}" value="{{$product->product_name}}" class="cart_product_name_{{$product->id_products}}">
+
+                                        <input type="hidden" value="{{$product->product_quantity}}" class="cart_product_quantity_{{$product->id_products}}">
+
+                                        <input type="hidden" value="{{$product->product_image}}" class="cart_product_image_{{$product->id_products}}">
+
+                                        <input type="hidden" id="wishlist_productprice{{$product->id_products}}" value="{{number_format($product->product_price,0,',','.')}}VNĐ">
+
+                                        <input type="hidden" value="{{$product->product_price}}" class="cart_product_price_{{$product->id_products}}">
+
+                                        <input type="hidden" value="1" class="cart_product_qty_{{$product->id_products}}">
+                                        <div class="item-products col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12">
+                                            <div class="images-products">
+                                                <a href="{{URL::to('/chi-tiet-san-pham/'.$product->id_products)}}">
+                                                    <img class="image-one" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
+                                                    <img class="image-two" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
+                                                </a>
+                                                <div class="love">
+                                                    <div class="love-one">
+                                                        <i class="far fa-heart"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="views">
+                                                    <div class="views-one">
+                                                        <i class="far fa-eye"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-products">
+                                                <h3><a href="">{{$product->product_name}}</a></h3>
+                                                <!-- <p> Mã số: 0020234</p> -->
+                                                <div class="price-item">
+                                                    <span class="price">{{number_format($product->product_price).' VNĐ'}}</span>
+                                                    <!-- <span class="price-discount">195,000đ </span> -->
+                                                </div>
+
+                                                <div class="addtocart">
+                                                    <div class="shopping">
+                                                        <button type="button" data-id_product="{{$product->id_products}}" name="add-to-cart" class="btn add-to-cart"> <i class="fas fa-shopping-cart"></i> ADD TO
+                                                            CART</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        @endforeach
                                     </div>
-                                    @endforeach
-                                </div>
+                                </form>
                             </div>
                             <div class="item-container" id="accessories">
-                                <div class="row">
-                                    @foreach($all_product_device as $key=> $product)
-                                    <div class="item-products col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12">
-                                        <div class="images-products">
-                                            <a href="{{URL::to('/chi-tiet-san-pham/'.$product->id_products)}}">
-                                                <img class="image-one" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
-                                                <img class="image-two" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
-                                            </a>
-                                            <!-- <div class="love">
+                                <form method="POST">
+                                    @csrf
+                                    <div class="row">
+                                        @foreach($all_product_device as $key=> $product)
+                                        <input type="hidden" value="{{$product->id_products}}" class="cart_product_id_{{$product->id_products}}">
+
+                                        <input type="hidden" id="wishlist_productname{{$product->id_products}}" value="{{$product->product_name}}" class="cart_product_name_{{$product->id_products}}">
+
+                                        <input type="hidden" value="{{$product->product_quantity}}" class="cart_product_quantity_{{$product->id_products}}">
+
+                                        <input type="hidden" value="{{$product->product_image}}" class="cart_product_image_{{$product->id_products}}">
+
+                                        <input type="hidden" id="wishlist_productprice{{$product->id_products}}" value="{{number_format($product->product_price,0,',','.')}}VNĐ">
+
+                                        <input type="hidden" value="{{$product->product_price}}" class="cart_product_price_{{$product->id_products}}">
+
+                                        <input type="hidden" value="1" class="cart_product_qty_{{$product->id_products}}">
+                                        <div class="item-products col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12">
+                                            <div class="images-products">
+                                                <a href="{{URL::to('/chi-tiet-san-pham/'.$product->id_products)}}">
+                                                    <img class="image-one" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
+                                                    <img class="image-two" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
+                                                </a>
+                                                <!-- <div class="love">
                                             <div class="love-one">
                                                 <i class="far fa-heart"></i>
                                             </div>
@@ -250,25 +316,25 @@
                                                 <i class="far fa-eye"></i>
                                             </div>
                                         </div> -->
-                                        </div>
-                                        <div class="text-products">
-                                            <h3><a href="">{{$product->product_name}}</a></h3>
-                                            <!-- <p> Mã số: 0020234</p> -->
-                                            <div class="price-item">
-                                                <span class="price">{{number_format($product->product_price).' VNĐ'}}</span>
-                                                <!-- <span class="price-discount">195,000đ </span> -->
                                             </div>
+                                            <div class="text-products">
+                                                <h3><a href="">{{$product->product_name}}</a></h3>
+                                                <!-- <p> Mã số: 0020234</p> -->
+                                                <div class="price-item">
+                                                    <span class="price">{{number_format($product->product_price).' VNĐ'}}</span>
+                                                    <!-- <span class="price-discount">195,000đ </span> -->
+                                                </div>
 
-                                            <div class="addtocart">
-                                                <div class="shopping">
-                                                    <i class="fas fa-shopping-cart"></i>
-                                                    <span>ADD TO CART</span>
+                                                <div class="addtocart">
+                                                    <div class="shopping">
+                                                        <button type="button" data-id_product="{{$product->id_products}}" name="add-to-cart" class="btn add-to-cart"> <i class="fas fa-shopping-cart"></i> ADD TO
+                                                            CART</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    @endforeach
-                                    <!-- <div class="item-products col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12">
+                                        @endforeach
+                                        <!-- <div class="item-products col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12">
                                     <div class="images-products">
                                         <a href="">
                                             <img class="image-one" src="dist/img/yame6.png" alt="">
@@ -301,7 +367,9 @@
                                         </div>
                                     </div>
                                 </div> -->
-                                </div>
+                                    </div>
+                                </form>
+
                             </div>
                         </div>
                     </div>
@@ -318,43 +386,59 @@
                             <h2>Sản Phẩm Nổi Bật</h2>
                         </div>
                         <div class="category-section">
-                            <div class="row">
-                                @foreach($all_product_device as $key=> $product)
-                                <div class="item-category col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12">
-                                    <div class="images-products">
-                                        <a href="{{URL::to('/chi-tiet-san-pham/'.$product->id_products)}}">
-                                            <img class="image-one" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
-                                            <img class="image-two" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
-                                        </a>
-                                        <div class="love">
-                                            <div class="love-one">
-                                                <i class="far fa-heart"></i>
+                            <form method="POST">
+                                @csrf
+                                <div class="row">
+                                    @foreach($all_product_device as $key=> $product)
+                                    <input type="hidden" value="{{$product->id_products}}" class="cart_product_id_{{$product->id_products}}">
+
+                                    <input type="hidden" id="wishlist_productname{{$product->id_products}}" value="{{$product->product_name}}" class="cart_product_name_{{$product->id_products}}">
+
+                                    <input type="hidden" value="{{$product->product_quantity}}" class="cart_product_quantity_{{$product->id_products}}">
+
+                                    <input type="hidden" value="{{$product->product_image}}" class="cart_product_image_{{$product->id_products}}">
+
+                                    <input type="hidden" id="wishlist_productprice{{$product->id_products}}" value="{{number_format($product->product_price,0,',','.')}}VNĐ">
+
+                                    <input type="hidden" value="{{$product->product_price}}" class="cart_product_price_{{$product->id_products}}">
+
+                                    <input type="hidden" value="1" class="cart_product_qty_{{$product->id_products}}">
+                                    <div class="item-category col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12">
+                                        <div class="images-products">
+                                            <a href="{{URL::to('/chi-tiet-san-pham/'.$product->id_products)}}">
+                                                <img class="image-one" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
+                                                <img class="image-two" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
+                                            </a>
+                                            <div class="love">
+                                                <div class="love-one">
+                                                    <i class="far fa-heart"></i>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!-- <div class="views">
+                                            <!-- <div class="views">
                                         <div class="views-one">
                                             <i class="far fa-eye"></i>
                                         </div>
                                     </div> -->
-                                    </div>
-                                    <div class="text-products">
-                                        <h3><a href="">{{$product->product_name}}</a></h3>
-                                        <!-- <p> Mã số: 0020234</p> -->
-                                        <div class="price-item">
-                                            <span class="price">{{number_format($product->product_price).' VNĐ'}}</span>
-                                            <!-- <span class="price-discount">195,000đ </span> -->
                                         </div>
+                                        <div class="text-products">
+                                            <h3><a href="">{{$product->product_name}}</a></h3>
+                                            <!-- <p> Mã số: 0020234</p> -->
+                                            <div class="price-item">
+                                                <span class="price">{{number_format($product->product_price).' VNĐ'}}</span>
+                                                <!-- <span class="price-discount">195,000đ </span> -->
+                                            </div>
 
-                                        <div class="addtocart">
-                                            <div class="shopping">
-                                                <i class="fas fa-shopping-cart"></i>
-                                                <span>ADD TO CART</span>
+                                            <div class="addtocart">
+                                                <div class="shopping">
+                                                    <button type="button" data-id_product="{{$product->id_products}}" name="add-to-cart" class="btn add-to-cart"> <i class="fas fa-shopping-cart"></i> ADD TO
+                                                        CART</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    @endforeach
                                 </div>
-                                @endforeach
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>

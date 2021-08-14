@@ -9,6 +9,7 @@ use App\Slider;
 use App\Product;
 use Carbon\Carbon;
 use App\CatePost;
+use App\Models\Coupon;
 use Cart;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -90,21 +91,19 @@ class CheckoutController extends Controller
         // Session::put('message', 'Đăng ký tài khoản thành công');
         // return Redirect::to('/signup-checkout');
     }
-    public function checkout()
+    public function checkout(Request $Request)
     {
-        // $cate_product = DB::table('type_products')->where('status', '0')->orderby('id_type', 'desc')->get();
-        // $brand_product = DB::table('brand')->where('brand_status', '0')->orderby('id_brand', 'desc')->get();
-        // return view('pages.home')->with('category', $cate_product)->with('brand', $brand_product);
+
         $data['id_users'] = Session::get('id_users');
         $all_user = DB::table('users')->where('id_users', $data['id_users'])->get();
-        // return view('pages.checkout.show_checkout')->with('all_user', $all_user);
+        $cart = Session::get('cart');
 
         $cate_product = DB::table('type_products')->where('status', '0')->orderby('id_type', 'desc')->get();
         $brand_product = DB::table('brand')->where('brand_status', '0')->orderby('id_brand', 'desc')->get();
         $all_product = DB::table('products')->where('product_status', '0')->orderby('id_products', 'desc')->get();
         $all_product_device = DB::table('products')->where('product_status', '0')->where('id_type', '14')->orderby('id_products', 'desc')->get();
         $all_product_boy = DB::table('products')->where('product_status', '0')->where('id_type', '17')->orderby('id_products', 'desc')->get();
-        return view('pages.checkout.show_checkout')->with('category', $cate_product)->with('brand', $brand_product)->with('all_product', $all_product)->with('all_product_device', $all_product_device)->with('all_product_boy', $all_product_boy)->with('all_user', $all_user);
+        return view('pages.checkout.show_checkout')->with('category', $cate_product)->with('brand', $brand_product)->with('all_product', $all_product)->with('all_product_device', $all_product_device)->with('all_product_boy', $all_product_boy)->with('all_user', $all_user)->with('cart', $cart);
     }
     public function save_checkout_customer(Request $Request)
     {
@@ -144,9 +143,12 @@ class CheckoutController extends Controller
     }
     public function payment()
     {
+        $data['id_shipping'] = Session::get('id_shipping');
+
+        $id_shipping = DB::table('shipping')->where('id_shipping', $data['id_shipping'])->get();
         $cate_product = DB::table('type_products')->where('status', '0')->orderby('id_type', 'desc')->get();
         $brand_product = DB::table('brand')->where('brand_status', '0')->orderby('id_brand', 'desc')->get();
-        return view('pages.checkout.payment')->with('category', $cate_product)->with('brand', $brand_product);
+        return view('pages.checkout.payment')->with('category', $cate_product)->with('brand', $brand_product)->with('id_shipping', $id_shipping);
     }
     public function order_place(Request $Request)
     {

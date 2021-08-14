@@ -94,8 +94,8 @@
                         }
                         ?>
                         <div class="shopping">
-                            <a href="{{URL::to('/show-cart')}}"><i class="fab fa-shopify"></i></a>
-                            <span class="change">0</span>
+                            <a href="{{URL::to('/gio-hang')}}"><i class="fab fa-shopify"></i></a>
+                            <!-- <span class="change">0</span> -->
                         </div>
                         <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
                             <div class="modal-content">

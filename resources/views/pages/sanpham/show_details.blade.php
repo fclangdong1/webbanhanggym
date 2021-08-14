@@ -90,11 +90,10 @@
                         <a class="chitiet" data-electronic="reviews">Bình Luận</a>
                     </ul>
                 </div>
-
                 <div class="tab-content">
                     <div id="details" class="tab-pane active">
                         <p><i class="far fa-arrow-alt-circle-right"></i>
-                            <b>{{$details->product_desc}}</b>
+                            <b>{!!$details->product_desc!!}</b>
                         </p>
                     </div>
                     <div id="companyprofile" class="tab-pane">
