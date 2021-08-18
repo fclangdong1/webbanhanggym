@@ -69,6 +69,13 @@
                                     $subtotal = $cart['product_price']*$cart['product_qty'];
                                     $total+=$subtotal;
                                     @endphp
+                                    @if(Session::get('coupon_code'))
+                                    @foreach(Session::get('coupon_code') as $key => $cou)
+                                    <input type="hidden" name="order_coupon" class="order_coupon" value="{{$cou['coupon_code']}}">
+                                    @endforeach
+                                    @else
+                                    <input type="hidden" name="order_coupon" class="order_coupon" value="Không Khuyến Mãi">
+                                    @endif
                                     <tr>
                                         <td class="product-remove"><a href="{{URL::to('/del-product/'.$cart['session_id'])}}">X</a></td>
                                         <td class="product-thumbnail"> <a href=""><img style="width: 100px; height:130px;" src="{{URL::to('uploads/product/'.$cart['product_image'])}}" alt=""></a></td>

@@ -8,9 +8,6 @@
                 <div class="cart-left col-xl-8 col-lg-8 col-md-7 col-12">
                     <form action="{{URL::to('/update-cart-quantity')}}" method="post">
                         {{csrf_field()}}
-                        <?php
-                        $content = Cart::content();
-                        ?>
                         <div class="cart-left-form">
                             <table class="shop-table">
                                 <thead>
@@ -32,7 +29,7 @@
                                     $total+=$subtotal;
                                     @endphp
                                     <tr>
-                                        <td class="product-remove"><a href="{{URL::to('/del-product/'.$cart['session_id'])}}">X</a></td>
+                                        <td class="product-remove"><i style="color: #ff6801;" class="far fa-arrow-alt-circle-right"></i></td>
                                         <td class="product-thumbnail"> <a href=""><img style="width: 100px; height:130px;" src="{{URL::to('uploads/product/'.$cart['product_image'])}}" alt=""></a></td>
                                         <td class="product-thumbnail"> <a href="">{{$cart['product_name']}}</a></td>
                                         <td class="product-price">
@@ -48,6 +45,7 @@
                                             </span>
                                         </td>
                                     </tr>
+
                                     @endforeach
                                     @else
                                     @endif
@@ -68,9 +66,7 @@
                 </div>
                 <div class="cart-right col-xl-4 col-lg-4 col-md-5 col-12">
                     <div class="cart-total">
-                        <?php
-                        $content = Cart::content();
-                        ?>
+
                         <table cellspacing="0">
                             <thead>
                                 <tr>
@@ -126,6 +122,7 @@
                                         echo '
                                         '.number_format($total- $total_coupon,0,',','.').' VNĐ';
                                         @endphp
+
                                     </th>
                                 </tr>
                                 @elseif($cou['coupon_condition']==2)
@@ -135,6 +132,7 @@
                                         echo '
                                         '.number_format( $total-$total_coupon,0,',','.').' VNĐ';
                                         @endphp
+
                                     </th>
                                 </tr>
                                 @endif
@@ -142,6 +140,7 @@
                                 @else
                                 <tr class="cart-subtotal">
                                     <th style="font-weight: 300;">{{number_format($total,0,',','.')}} VNĐ</th>
+
                                 </tr>
                                 @endif
                             </tbody>
@@ -152,14 +151,35 @@
                                 <label for="">Phương Thức Thanh Toán</label>
                                 <select name="payment_option" id="" class="form-control input-sm m-bot15 choose city">
                                     <option value="">--Chọn Phương Thức Thanh Toán-- </option>
-                                    <option value="1">Tiền mặt</option>
+                                    <option value="1">Tiền Mặt</option>
                                     <option value="2">VNPAY</option>
                                 </select>
                             </div>
+
                             <div class=" payment">
                                 <input type="submit" value="Đặt Hàng" class="checkout-button button" name="send_order_place">
                             </div>
 
+                            @if(Session::get('coupon_code'))
+                            @foreach(Session::get('coupon_code') as $key => $cou)
+                            @if($cou['coupon_condition']==1)
+                            <input type="hidden" name="order_total" value=" @php
+                                        $total_coupon= ($total*$cou['coupon_number'])/100;
+                                        echo '
+                                        '.number_format($total- $total_coupon,0,',','.').'';
+                                        @endphp">
+                            @elseif($cou['coupon_condition']==2)
+                            <input type="hidden" name="order_total" value="@php
+                                        $total_coupon= $cou['coupon_number'];
+                                        echo '
+                                        '.number_format( $total-$total_coupon,0,',','.').'';
+                                        @endphp">
+                            @endif
+                            @endforeach
+                            @else
+                            <input type="hidden" name="order_total" value="{{number_format($total,0,',','.')}}">
+
+                            @endif
                         </form>
                     </div>
                 </div>

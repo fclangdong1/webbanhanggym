@@ -123,9 +123,9 @@ class CartController extends Controller
                 }
             }
             Session::put('cart', $cart);
-            return redirect()->back()->with('message', 'Xóa sản phẩm thành công');
+            return redirect()->back();
         } else {
-            return redirect()->back()->with('message', 'Xóa sản phẩm thất bại');
+            return redirect()->back();
         }
     }
     // update sản phâm giỏ hàng

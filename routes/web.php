@@ -248,7 +248,10 @@ Route::post('update-user', [
 	'as' => 'update-user',
 	'uses' => 'App\Http\Controllers\UserController@update_user'
 ]);
-
+Route::post('changPassword', [
+	'as' => 'changPassword',
+	'uses' => 'App\Http\Controllers\UserController@changPassword'
+]);
 // Check out thanh toan
 // Route::get('login-checkout', [
 // 	'as' => 'login-checkout',
@@ -288,6 +291,15 @@ Route::get('manage-order', [
 Route::get('view-order/{orderId}', [
 	'as' => 'view-order/{orderId}',
 	'uses' => 'App\Http\Controllers\CheckoutController@view_order'
+]);
+Route::post('update-order-qty', [
+	'as' => 'update-order-qty',
+	'uses' => 'App\Http\Controllers\OrderController@update_order_qty'
+]);
+// khách hủy đơn hàng
+Route::post('huy-don-hang', [
+	'as' => 'huy-don-hang',
+	'uses' => 'App\Http\Controllers\OrderController@huy_don_hang'
 ]);
 // đăng nhập khách hàng
 Route::post('login-customer', [

@@ -43,17 +43,23 @@
                         <td><i>{{$i}}</i></label></td>
                         <td>{{ $ord->fullname }}</td>
                         <td>{{ $ord->order_total }}</td>
-                        <td>{{ $ord->order_status }}</td>
-                        <td>{{ $ord->order_date }}</td>
+                        <!-- <td>{{ $ord->order_status }}</td> -->
 
-                        <!-- <td>@if($ord->order_status==1)
+
+                        <td>@if($ord->order_status==1)
                             Đơn hàng mới
+                            @elseif($ord->order_status==2)
+                            Đã xử lý
+                            @elseif($ord->order_status==3)
+                            Đang Giao Hàng
+                            @elseif($ord->order_status==4)
+                            Đã Nhận Hàng
                             @else
-                            Đã xử lý - Đã giao hàng
+                            Hủy Đơn Hàng
                             @endif
-                        </td> -->
+                        </td>
 
-
+                        <td>{{ $ord->order_date }}</td>
                         <td>
                             <a href="{{URL::to('/view-order/'.$ord->id_order)}}" class="active styling-edit" ui-toggle-class="">
                                 <i class="fa fa-eye text-success text-active"></i></a>

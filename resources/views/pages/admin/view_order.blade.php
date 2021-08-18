@@ -31,7 +31,7 @@
 
                     <tr>
                         <td>{{$order_by_id['0']->fullname}}</td>
-                        <td>{{$order_by_id['0']->phone}}</td>
+                        <td>0{{$order_by_id['0']->phone}}</td>
                         <td>{{$order_by_id['0']->email}}</td>
 
                     </tr>
@@ -81,10 +81,10 @@
 
                         <td>{{$order_by_id['0']->shipping_name}}</td>
                         <td>{{$order_by_id['0']->shipping_address}}</td>
-                        <td>{{$order_by_id['0']->shipping_phone}}</td>
+                        <td>0{{$order_by_id['0']->shipping_phone}}</td>
                         <td>{{$order_by_id['0']->shipping_email}}</td>
                         <td>{{$order_by_id['0']->shipping_note}}</td>
-                        <td>@if($order_by_id['0']->shipping_method==1) Chuyển khoản @else Tiền mặt @endif</td>
+                        <td>@if($order_by_id['0']->shipping_method==0) VNPAY @else Tiền Mặt @endif</td>
 
 
                     </tr>
@@ -122,8 +122,8 @@
                             </label>
                         </th>
                         <th>Tên sản phẩm</th>
-                        <!-- <th>Số lượng kho còn</th> -->
-                        <!-- <th>Mã giảm giá</th> -->
+                        <th>Mã Đơn Hàng</th>
+                        <th>Mã giảm giá</th>
                         <!-- <th>Phí ship hàng</th> -->
                         <th>Số lượng</th>
                         <th>Giá bán</th>
@@ -145,14 +145,74 @@
 
                         <td><i>{{$i}}</i></label></td>
                         <td>{{$details->product_name}}</td>
+                        <td>{{$details->orders_code}}</td>
+                        <td>{{$details->product_coupon}}</td>
                         <td>{{$details->product_quantity}}</td>
                         <td>{{$details->product_price}}</td>
                         <td>{{$tatol =$details->product_price*$details->product_quantity}}</td>
                     </tr>
                     @endforeach
                 </tbody>
+                <tr>
+                    <td colspan="2">
+
+                        @if($order_by_id['0']->order_status == 1)
+
+                        <form action="">
+                            @csrf
+                            <select name="" class="form-control order_details" id="">
+                                <option id="{{$order_by_id['0']->id_order}}" value="1">Đơn Hàng Mới</option>
+                                <option id="{{$order_by_id['0']->id_order}}" value="2">Đã xử lý</option>
+                                <option id="{{$order_by_id['0']->id_order}}" value="3">Đang giao hàng</option>
+                                <option id="{{$order_by_id['0']->id_order}}" value="4">Đã Nhận Hàng</option>
+                                <option id="{{$order_by_id['0']->id_order}}" value="5">Hủy Đơn Hàng</option>
+                            </select>
+                        </form>
+                        @elseif($order_by_id['0']->order_status == 2)
+                        <form action="">
+                            @csrf
+                            <select name="" class="form-control order_details" id="">
+                                <option id="{{$order_by_id['0']->id_order}}" value="1">Đơn Hàng Mới</option>
+                                <option id="{{$order_by_id['0']->id_order}}" selected value="2">Đã xử lý</option>
+                                <option id="{{$order_by_id['0']->id_order}}" value="3">Đang giao hàng</option>
+                                <option id="{{$order_by_id['0']->id_order}}" value="4">Đã Nhận Hàng</option>
+                                <option id="{{$order_by_id['0']->id_order}}" value="5">Hủy Đơn Hàng</option>
+                            </select>
+                        </form>
+                        @elseif($order_by_id['0']->order_status == 3)
+                        <form action="">
+                            @csrf
+                            <select name="" class="form-control order_details" id="">
+                                <!-- <option id="{{$order_by_id['0']->id_order}}" value="1">Đơn Hàng Mới</option>
+                                <option id="{{$order_by_id['0']->id_order}}" value="2">Đã xử lý</option> -->
+                                <option id="{{$order_by_id['0']->id_order}}" selected value="3">Đang giao hàng</option>
+                                <option id="{{$order_by_id['0']->id_order}}" value="4">Đã Nhận Hàng</option>
+                                <option id="{{$order_by_id['0']->id_order}}" value="5">Hủy Đơn Hàng</option>
+                            </select>
+                        </form>
+                        @elseif($order_by_id['0']->order_status == 4)
+                        <form action="">
+                            @csrf
+                            <select name="" class="form-control order_details" id="">
+
+                                <option id="{{$order_by_id['0']->id_order}}" selected value="4">Đã Nhận Hàng</option>
+                            </select>
+                        </form>
+                        @else
+                        <form action="">
+                            @csrf
+                            <select name="" class="form-control order_details" id="">
+
+                                <option id="{{$order_by_id['0']->id_order}}" selected value="5">Hủy Đơn Hàng</option>
+
+                            </select>
+                        </form>
+                        @endif
+
+                    </td>
+                </tr>
             </table>
-            <a target="_blank" href="">In đơn hàng</a>
+            <!-- <a target="_blank" href="">In đơn hàng</a> -->
         </div>
 
     </div>

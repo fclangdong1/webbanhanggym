@@ -47,6 +47,28 @@
 <script src="{{asset('frontend/js/detail.js')}}"></script>
 <script src="{{asset('frontend/js/users.js')}}"></script>
 <script src="{{asset('frontend/js/sweetalert.js')}}"></script>
+<!-- khách hàng hủy đơn hàng  -->
+<script type="text/javascript">
+    function Huydonhang(id) {
+        var order_code = id;
+        var lydo = $('.lydohuydon').val();
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{url('/huy-don-hang')}}",
+            method: "POST",
+            data: {
+                order_code: order_code,
+                lydo: lydo,
+                _token: _token
+            },
+            success: function(data) {
+
+                alert("hủy đơn hàng thành công")
+                location.reload();
+            }
+        });
+    }
+</script>
 <!-- ajax bình luận -->
 <script type="text/javascript">
     $(document).ready(function() {
@@ -131,6 +153,7 @@
                                 title: "Đã thêm sản phẩm vào giỏ hàng",
                                 text: "Bạn có thể mua hàng tiếp hoặc tới giỏ hàng để tiến hành thanh toán",
                                 showCancelButton: true,
+                                cancelButtonClass: "btn-success",
                                 cancelButtonText: "Xem tiếp",
                                 confirmButtonClass: "btn-success",
                                 confirmButtonText: "Đi đến giỏ hàng",

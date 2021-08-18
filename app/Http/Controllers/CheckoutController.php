@@ -10,12 +10,16 @@ use App\Product;
 use Carbon\Carbon;
 use App\CatePost;
 use App\Models\Coupon;
+use App\Models\Order;
+use App\Models\OrderDetails;
+use App\Models\Shipping;
 use Cart;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 session_start();
 
 use Illuminate\Support\Facades\Redirect;
+use phpDocumentor\Reflection\Types\Null_;
 
 class CheckoutController extends Controller
 
@@ -156,24 +160,48 @@ class CheckoutController extends Controller
         $data = array();
         $data['payment_method'] = $Request->payment_option;
         $data['payment_status'] = 'Đang chờ xử lý';
+        $data['id_order'] = Session::get('id_order');
         $payment_id = DB::table('payments')->insertGetId($data);
+        // dd($Request->payment_option);
         //insert order
-        $order_data = array();
-        $order_data['id_users'] = Session::get('id_users');
-        $order_data['id_shipping'] = Session::get('id_shipping');
-        $order_data['payment_id'] = $payment_id;
-        $order_data['order_total'] = Cart::priceTotal();
-        $order_data['order_status'] = 'Đang chờ xử lý';
-        $order_id = DB::table('order')->insertGetId($order_data);
+        $checkout_code = substr(md5(microtime()), rand(0, 26), 5);
+        $order = new Order;
+        $order->id_users = Session::get('id_users');
+        $order->id_shipping =  Session::get('id_shipping');
+        $order->payment_id = $payment_id;;
+        $order->order_status = 1;
+
+        $order->order_total = $Request->order_total;
+        $order->order_code = $checkout_code;
+        $order->save();
+        Session::put('id_order', $order->id_order);
         // insert order_details
-        $contentone = Cart::content();
-        foreach ($contentone as $y_content) {
-            $order_d_data['id_orders'] = $order_id;
-            $order_d_data['id_products'] = $y_content->id;
-            $order_d_data['product_name'] = $y_content->name;
-            $order_d_data['product_price'] = $y_content->price;
-            $order_d_data['product_quantity'] = $y_content->qty;
-            DB::table('order_details')->insert($order_d_data);
+        if (Session::get('cart') == true) {
+            foreach (Session::get('cart') as $key => $cart) {
+                $order_details = new OrderDetails;
+
+                $order_details->orders_code = $checkout_code;
+                $order_details->id_orders = Session::get('id_order');
+                $order_details->id_products = $cart['id_products'];
+                $order_details->product_name = $cart['product_name'];
+                $order_details->product_price = $cart['product_price'];
+                $order_details->product_quantity = $cart['product_qty'];
+                if (Session::get('coupon_code') != NUll) {
+                    $coupon_code = Session::get('coupon_code');
+                    $order_details->product_coupon =   $coupon_code[0]['coupon_code'];
+                } else {
+                    $order_details->product_coupon =  'Không Khuyến Mãi';
+                }
+
+                $order_details->save();
+            }
+        }
+
+        $coupon_code = Session::get('coupon_code');
+
+        if ($coupon_code == true) {
+            Session::forget('coupon_code');
+            return redirect()->back()->with('mesage', 'Xóa mã thành công');
         }
         if ($data['payment_method'] == 1) {
 
@@ -186,6 +214,7 @@ class CheckoutController extends Controller
             echo 'Thanh toán VNPAY';
         }
     }
+
     public function logout_checkout()
     {
         Session::flush();
@@ -243,12 +272,16 @@ class CheckoutController extends Controller
     public function view_order($orderId)
     {
         $this->AuthLogin();
+
         $order_by_id = DB::table('order')->where('id_order', $orderId)
             ->join('users', 'order.id_users', '=', 'users.id_users')
+            // ->join('payments', 'order.payment_id', '=', 'payments.payment_id')
             ->join('shipping', 'order.id_shipping', '=', 'shipping.id_shipping')
             ->join('order_details', 'order.id_order', '=', 'order_details.id_orders')
             ->select('order.*', 'users.*', 'shipping.*', 'order_details.*')->get();
         $manager_order_by_id  = view('pages.admin.view_order')->with('order_by_id', $order_by_id);
+        // dd($order_by_id);
+        // dd($order_by_id);
         return view('admin_layout')->with('pages.admin.view_order', $manager_order_by_id);
 
 

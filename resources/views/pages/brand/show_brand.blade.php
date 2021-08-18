@@ -90,12 +90,25 @@
                         @endforeach
                         <div class="category-section">
                             <div class="row">
-                                @foreach($show_brand_id as $key=> $brand_id)
+                                @foreach($show_brand_id as $key=> $product)
+                                <input type="hidden" value="{{$product->id_products}}" class="cart_product_id_{{$product->id_products}}">
+
+                                <input type="hidden" id="wishlist_productname{{$product->id_products}}" value="{{$product->product_name}}" class="cart_product_name_{{$product->id_products}}">
+
+                                <input type="hidden" value="{{$product->product_quantity}}" class="cart_product_quantity_{{$product->id_products}}">
+
+                                <input type="hidden" value="{{$product->product_image}}" class="cart_product_image_{{$product->id_products}}">
+
+                                <input type="hidden" id="wishlist_productprice{{$product->id_products}}" value="{{number_format($product->product_price,0,',','.')}}VNĐ">
+
+                                <input type="hidden" value="{{$product->product_price}}" class="cart_product_price_{{$product->id_products}}">
+
+                                <input type="hidden" value="1" class="cart_product_qty_{{$product->id_products}}">
                                 <div class="item-category col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12">
                                     <div class="images-products">
-                                        <a href="{{URL::to('/chi-tiet-san-pham/'.$brand_id->id_products)}}">
-                                            <img class="image-one" src="{{URL::to('uploads/product/'.$brand_id->product_image)}}" alt="">
-                                            <img class="image-two" src="{{URL::to('uploads/product/'.$brand_id->product_image)}}" alt="">
+                                        <a href="{{URL::to('/chi-tiet-san-pham/'.$product->id_products)}}">
+                                            <img class="image-one" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
+                                            <img class="image-two" src="{{URL::to('uploads/product/'.$product->product_image)}}" alt="">
                                         </a>
                                         <!-- <div class="love">
                                         <div class="love-one">
@@ -109,17 +122,17 @@
                                     </div> -->
                                     </div>
                                     <div class="text-products">
-                                        <h3><a href="">{{$brand_id->product_name}}</a></h3>
+                                        <h3><a href="">{{$product->product_name}}</a></h3>
                                         <!-- <p> Mã số: 0020234</p> -->
                                         <div class="price-item">
-                                            <span class="price">{{number_format($brand_id->product_price).' VNĐ'}}</span>
+                                            <span class="price">{{number_format($product->product_price).' VNĐ'}}</span>
                                             <!-- <span class="price-discount">195,000đ </span> -->
                                         </div>
 
                                         <div class="addtocart">
                                             <div class="shopping">
-                                                <i class="fas fa-shopping-cart"></i>
-                                                <span>ADD TO CART</span>
+                                                <button type="button" data-id_product="{{$product->id_products}}" name="add-to-cart" class="btn add-to-cart"> <i class="fas fa-shopping-cart"></i> ADD TO
+                                                    CART</button>
                                             </div>
                                         </div>
                                     </div>
