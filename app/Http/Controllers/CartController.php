@@ -23,10 +23,10 @@ class CartController extends Controller
     public function gio_hang(Request $request)
     {
 
-
+        $cart = Session::get('cart');
         $cate_product = DB::table('type_products')->where('status', '0')->orderby('id_type', 'desc')->get();
         $brand_product = DB::table('brand')->where('brand_status', '0')->orderby('id_brand', 'desc')->get();
-        return view('pages.cart.cart_ajax')->with('category', $cate_product)->with('brand', $brand_product);
+        return view('pages.cart.cart_ajax')->with('category', $cate_product)->with('brand', $brand_product)->with('cart', $cart);
     }
     public function add_cart_ajax(Request $request)
     {
@@ -141,11 +141,11 @@ class CartController extends Controller
                 foreach ($cart as $session => $val) {
                     $i++;
 
-                    if ($val['session_id'] == $key && $qty < $cart[$session]['product_quantity']) {
+                    if ($val['session_id'] == $key && $qty <= $cart[$session]['product_quantity']) {
 
                         $cart[$session]['product_qty'] = $qty;
                         // $message .= '<p style="color:blue">' . $i . ') Cập nhật số lượng :' . $cart[$session]['product_name'] . ' thành công</p>';
-                    } elseif ($val['session_id'] == $key && $qty > $cart[$session]['product_quantity']) {
+                    } elseif ($val['session_id'] == $key && $qty >= $cart[$session]['product_quantity']) {
                         // $message .= '<p style="color:red">' . $i . ') Cập nhật số lượng :' . $cart[$session]['product_name'] . ' thất bại</p>';
                     }
                 }
@@ -157,15 +157,7 @@ class CartController extends Controller
             return redirect()->back();
         }
     }
-    // update sản phâm giỏ hàng
-    public function update_cart_quantity(Request $request)
-    {
-        $rowId = $request->rowId_cart;
-        $qty =  $request->sldvsl;
 
-        Cart::update($rowId, $qty);
-        return Redirect::to('/show-cart');
-    }
     // tinh phi khuyen mai 
     public function check_coupon(Request $request)
     {

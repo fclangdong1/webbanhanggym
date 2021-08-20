@@ -129,7 +129,10 @@
             var cart_product_price = $('.cart_product_price_' + id).val();
             var cart_product_qty = $('.cart_product_qty_' + id).val();
             var _token = $('input[name="_token"]').val();
-            if (parseInt(cart_product_qty) > parseInt(cart_product_quantity)) {
+            if (parseInt(cart_product_quantity) == 0) {
+
+                alert('Sản Phẩm tạm thời hết hàng');
+            } else if (parseInt(cart_product_qty) > parseInt(cart_product_quantity)) {
                 alert('Làm ơn đặt nhỏ hơn ' + cart_product_quantity);
             } else {
 
@@ -171,6 +174,36 @@
 
         });
     });
+</script>
+<script src="https://www.paypal.com/sdk/js?client-id=AdjVxoUrXV076qqWlcY0jaMQo6ICFm0rH-3rxAR2TrzZ8Bw3M_G5wmBys73F8Ohf5n-SNqI-KXF_DdwC">
+    // Required. Replace YOUR_CLIENT_ID with your sandbox client ID.
+</script>
+<script>
+    var cart_total = document.getElementById("cart_total").value;
+
+
+    paypal.Buttons({
+        createOrder: function(data, actions) {
+            // This function sets up the details of the transaction, including the amount and line item details.
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        // value: '0.1'
+                        value: `${cart_total}`
+                    }
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            // This function captures the funds from the transaction.
+            return actions.order.capture().then(function(details) {
+                // This function shows a transaction success message to your buyer.
+                // alert('Transaction completed by ' + details.payer.name.given_name);
+                window.location.replace('http://phanvanha.com:8000/');
+            });
+        }
+    }).render('#paypal-button-container');
+    //This function displays Smart Payment Buttons on your web page.
 </script>
 
 </html>

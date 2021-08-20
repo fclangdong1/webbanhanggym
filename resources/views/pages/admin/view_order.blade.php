@@ -172,7 +172,7 @@
                         <form action="">
                             @csrf
                             <select name="" class="form-control order_details" id="">
-                                <option id="{{$order_by_id['0']->id_order}}" value="1">Đơn Hàng Mới</option>
+                                <!-- <option id="{{$order_by_id['0']->id_order}}" value="1">Đơn Hàng Mới</option> -->
                                 <option id="{{$order_by_id['0']->id_order}}" selected value="2">Đã xử lý</option>
                                 <option id="{{$order_by_id['0']->id_order}}" value="3">Đang giao hàng</option>
                                 <option id="{{$order_by_id['0']->id_order}}" value="4">Đã Nhận Hàng</option>

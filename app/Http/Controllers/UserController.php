@@ -34,7 +34,7 @@ class UserController extends Controller
         $this->AuthLogin();
 
         $data['id_users'] = Session::get('id_users');
-        $history_order = DB::table('order')->where('id_users', $data['id_users'])->get();
+        $history_order = DB::table('order')->where('id_users', $data['id_users'])->orderby('id_order', 'desc')->get();
         $all_user = DB::table('users')->where('id_users', $data['id_users'])->get();
         $cate_product = DB::table('type_products')->where('status', '0')->orderby('id_type', 'desc')->get();
         $brand_product = DB::table('brand')->where('brand_status', '0')->orderby('id_brand', 'desc')->get();

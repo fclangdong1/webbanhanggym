@@ -4,6 +4,13 @@
     <div class="cart-shopping">
         <div class="container">
             <h2>Thanh Toán Đặt Mua</h2>
+            <?php
+            $mess = Session::get('mess');
+            if ($mess) {
+                echo '<span class="text-alert" style="font-size: 1rem; display:flex; color: red; font-weight: 700; text-align: center;">' . $mess . '</span>';
+                Session::put('mess', null);
+            }
+            ?>
             <div class="row">
                 <div class="cart-left col-xl-8 col-lg-8 col-md-7 col-12">
                     <form action="{{URL::to('/update-cart-quantity')}}" method="post">
@@ -122,6 +129,10 @@
                                         echo '
                                         '.number_format($total- $total_coupon,0,',','.').' VNĐ';
                                         @endphp
+                                        @php
+                                        $total_usd= $total/23000;
+                                        @endphp
+                                        <input type="hidden" id="cart_total" value="{{round($total_usd)}}">
 
                                     </th>
                                 </tr>
@@ -132,6 +143,10 @@
                                         echo '
                                         '.number_format( $total-$total_coupon,0,',','.').' VNĐ';
                                         @endphp
+                                        @php
+                                        $total_usd= $total/23000;
+                                        @endphp
+                                        <input type="hidden" id="cart_total" value="{{round($total_usd)}}">
 
                                     </th>
                                 </tr>
@@ -140,9 +155,14 @@
                                 @else
                                 <tr class="cart-subtotal">
                                     <th style="font-weight: 300;">{{number_format($total,0,',','.')}} VNĐ</th>
+                                    @php
 
+                                    $total_usd= $total/23000;
+                                    @endphp
+                                    <input type="hidden" id="cart_total" value="{{round($total_usd)}}">
                                 </tr>
                                 @endif
+
                             </tbody>
                         </table>
                         <form action="{{URL::to('/order-place')}}" method="post">
@@ -150,13 +170,14 @@
                             <div class="form-group">
                                 <label for="">Phương Thức Thanh Toán</label>
                                 <select name="payment_option" id="" class="form-control input-sm m-bot15 choose city">
-                                    <option value="">--Chọn Phương Thức Thanh Toán-- </option>
+                                    <option value="1">--Chọn Phương Thức Thanh Toán-- </option>
                                     <option value="1">Tiền Mặt</option>
                                     <option value="2">VNPAY</option>
                                 </select>
                             </div>
+                            <div id="paypal-button-container"></div>
 
-                            <div class=" payment">
+                            <div class="payment">
                                 <input type="submit" value="Đặt Hàng" class="checkout-button button" name="send_order_place">
                             </div>
 
@@ -167,6 +188,7 @@
                                         $total_coupon= ($total*$cou['coupon_number'])/100;
                                         echo '
                                         '.number_format($total- $total_coupon,0,',','.').'';
+                                        
                                         @endphp">
                             @elseif($cou['coupon_condition']==2)
                             <input type="hidden" name="order_total" value="@php

@@ -11,8 +11,10 @@ use Carbon\Carbon;
 use App\CatePost;
 use App\Models\Coupon;
 use App\Models\Order;
+use App\Models\Products;
 use App\Models\OrderDetails;
 use App\Models\Shipping;
+use Illuminate\Support\Facades\Hash;
 use Cart;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -124,6 +126,7 @@ class CheckoutController extends Controller
                 'shipping_email.email' => 'Không đúng định dạng email',
                 'shipping_address.required' => 'Vui lòng nhập địa chỉ',
                 'shipping_name.required' => 'Vui lòng nhập tên người nhận',
+                'shipping_phone.required' => 'Vui lòng nhập số điện thoại',
                 'shipping_phone.max' => 'Số điện thoại gồm 10 số',
                 'shipping_phone.min' => 'Số điện thoại gồm 10 số',
             ]
@@ -158,6 +161,7 @@ class CheckoutController extends Controller
     {
         //        insert payment
         $data = array();
+
         $data['payment_method'] = $Request->payment_option;
         $data['payment_status'] = 'Đang chờ xử lý';
         $data['id_order'] = Session::get('id_order');
@@ -180,23 +184,38 @@ class CheckoutController extends Controller
             foreach (Session::get('cart') as $key => $cart) {
                 $order_details = new OrderDetails;
 
+                // $products = new Products;
                 $order_details->orders_code = $checkout_code;
                 $order_details->id_orders = Session::get('id_order');
                 $order_details->id_products = $cart['id_products'];
                 $order_details->product_name = $cart['product_name'];
                 $order_details->product_price = $cart['product_price'];
                 $order_details->product_quantity = $cart['product_qty'];
+
+                $Products = Products::where('id_products', $order_details->id_products)->first();
+                $new_products = $Products->product_quantity - $cart['product_qty'];
+
+
                 if (Session::get('coupon_code') != NUll) {
                     $coupon_code = Session::get('coupon_code');
                     $order_details->product_coupon =   $coupon_code[0]['coupon_code'];
                 } else {
                     $order_details->product_coupon =  'Không Khuyến Mãi';
                 }
+                if ($new_products >= 0 && $Products->product_quantity >= $cart['product_qty']) {
+                    $data_product = array();
+                    $data_product['product_quantity'] = $new_products;
+                    DB::table('products')->where('id_products', $order_details->id_products)->update($data_product);
+                } else {
+                    // Session::put('message', 'Cập Nhập Thành Công');
+                    // Session::put('message', 'sản phẩm hiện hết hàng hoặc có người đặt nhanh hơn bạn');
+                    return redirect()->back()->with('mess', 'Sản phẩm hiện hết hàng hoặc có người đặt nhanh hơn bạn');
+                }
 
+                // $products->save();
                 $order_details->save();
             }
         }
-
         $coupon_code = Session::get('coupon_code');
 
         if ($coupon_code == true) {
@@ -205,12 +224,13 @@ class CheckoutController extends Controller
         }
         if ($data['payment_method'] == 1) {
 
-            Cart::destroy();
+            Session::forget('cart');
 
             $cate_product = DB::table('type_products')->where('status', '0')->orderby('id_type', 'desc')->get();
             $brand_product = DB::table('brand')->where('brand_status', '0')->orderby('id_brand', 'desc')->get();
             return view('pages.checkout.handcash')->with('category', $cate_product)->with('brand', $brand_product);
         } else {
+            Session::forget('cart');
             echo 'Thanh toán VNPAY';
         }
     }

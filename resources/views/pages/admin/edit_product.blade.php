@@ -25,7 +25,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">SL sản phẩm</label>
-                            <input type="text" data-validation="product_quantity" data-validation-error-msg="Làm ơn điền số lượng" name="product_quantity" class="form-control" id="convert_slug" value="{{$pro->product_quantity}}">
+                            <input type="number" data-validation="product_quantity" data-validation-error-msg="Làm ơn điền số lượng" name="product_quantity" class="form-control" id="convert_slug" value="{{$pro->product_quantity}}">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Slug</label>
@@ -33,7 +33,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Giá bán</label>
-                            <input type="text" value="{{$pro->product_price}}" name="product_price" class="form-control price_format" id="exampleInputEmail1">
+                            <input type="number" value="{{$pro->product_price}}" name="product_price" class="form-control price_format" id="exampleInputEmail1">
                         </div>
 
                         <div class="form-group">

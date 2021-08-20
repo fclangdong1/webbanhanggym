@@ -93,6 +93,7 @@ class ProductController extends Controller
     // lưu  sản phẩm
     public function save_product(Request $request)
     {
+
         $data = array();
         $data['product_name'] = $request->product_name;
         $data['product_quantity'] = $request->product_quantity;
