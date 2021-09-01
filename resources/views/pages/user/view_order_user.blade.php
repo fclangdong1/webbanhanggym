@@ -1,6 +1,6 @@
-@extends('admin_layout')
-@section('admin_content')
-<div class="table-agile-info">
+@extends('layout')
+@section('content')
+<div class="table-agile-info container">
 
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -44,7 +44,7 @@
     </div>
 </div>
 <br>
-<div class="table-agile-info">
+<div class="table-agile-info container">
 
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -84,7 +84,7 @@
                         <td>0{{$order_by_id['0']->shipping_phone}}</td>
                         <td>{{$order_by_id['0']->shipping_email}}</td>
                         <td>{{$order_by_id['0']->shipping_note}}</td>
-                        <td>@if($order_by_id['0']->shipping_method==0) VNPAY @else Tiền Mặt @endif</td>
+                        <td>@if($order_by_id['0']->shipping_method==0) Tiền Mặt @else VNPAY @endif</td>
 
 
                     </tr>
@@ -97,7 +97,7 @@
     </div>
 </div>
 <br><br>
-<div class="table-agile-info">
+<div class="table-agile-info container">
 
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -150,66 +150,16 @@
                         <td>{{$details->product_quantity}}</td>
                         <td>{{$details->product_price}}</td>
                         <td>{{$tatol =$details->product_price*$details->product_quantity}}</td>
+
                     </tr>
                     @endforeach
                 </tbody>
-                <tr>
-                    <td colspan="2">
 
-                        @if($order_by_id['0']->order_status == 1)
-
-                        <form action="">
-                            @csrf
-                            <select name="" class="form-control order_details" id="">
-                                <option id="{{$order_by_id['0']->id_order}}" value="1">Đơn Hàng Mới</option>
-                                <option id="{{$order_by_id['0']->id_order}}" value="2">Đã xử lý</option>
-
-                            </select>
-                        </form>
-                        @elseif($order_by_id['0']->order_status == 2)
-                        <form action="">
-                            @csrf
-                            <select name="" class="form-control order_details" id="">
-                                <!-- <option id="{{$order_by_id['0']->id_order}}" value="1">Đơn Hàng Mới</option> -->
-                                <option id="{{$order_by_id['0']->id_order}}" selected value="2">Đã xử lý</option>
-                                <option id="{{$order_by_id['0']->id_order}}" value="3">Đang giao hàng</option>
-
-                            </select>
-                        </form>
-                        @elseif($order_by_id['0']->order_status == 3)
-                        <form action="">
-                            @csrf
-                            <select name="" class="form-control order_details" id="">
-                                <!-- <option id="{{$order_by_id['0']->id_order}}" value="1">Đơn Hàng Mới</option>
-                                <option id="{{$order_by_id['0']->id_order}}" value="2">Đã xử lý</option> -->
-                                <option id="{{$order_by_id['0']->id_order}}" selected value="3">Đang giao hàng</option>
-                                <option id="{{$order_by_id['0']->id_order}}" value="4">Đã Nhận Hàng</option>
-                                <option id="{{$order_by_id['0']->id_order}}" value="5">Hủy Đơn Hàng</option>
-                            </select>
-                        </form>
-                        @elseif($order_by_id['0']->order_status == 4)
-                        <form action="">
-                            @csrf
-                            <select name="" class="form-control order_details" id="">
-
-                                <option id="{{$order_by_id['0']->id_order}}" selected value="4">Đã Nhận Hàng</option>
-                            </select>
-                        </form>
-                        @else
-                        <form action="">
-                            @csrf
-                            <select name="" class="form-control order_details" id="">
-
-                                <option id="{{$order_by_id['0']->id_order}}" selected value="5">Hủy Đơn Hàng</option>
-
-                            </select>
-                        </form>
-                        @endif
-
-                    </td>
-                </tr>
             </table>
-            <!-- <a target="_blank" href="">In đơn hàng</a> -->
+            <div style="display: flex;">
+                <h1>Tổng Tiền phải thanh toán : </h1>
+                <span style="color: red;font-weight: 700; padding-left: 10px; font-size: 36px;">{{number_format($details->order_total,0,',','.')}}</span>
+            </div>
         </div>
 
     </div>

@@ -169,13 +169,21 @@
                             {{csrf_field()}}
                             <div class="form-group">
                                 <label for="">Phương Thức Thanh Toán</label>
-                                <select name="payment_option" id="" class="form-control input-sm m-bot15 choose city">
-                                    <option value="1">--Chọn Phương Thức Thanh Toán-- </option>
+                                <?php
+                                $message = Session::get('message');
+                                if ($message) {
+                                    echo '<span class="text-alert" style="font-size: 1rem; display:flex; color: red; font-weight: 700; text-align: center;">' . $message . '</span>';
+                                    Session::put('message', null);
+                                }
+                                ?>
+                                <select name="payment_option" id="paypal-one" class="form-control input-sm m-bot15 choose city">
+                                    <option value="0">--Chọn Phương Thức Thanh Toán-- </option>
                                     <option value="1">Tiền Mặt</option>
                                     <option value="2">VNPAY</option>
                                 </select>
                             </div>
-                            <div id="paypal-button-container"></div>
+                            <!-- //paypal -->
+                            <div id="paypal-button-container" class="total-paypal"></div>
 
                             <div class="payment">
                                 <input type="submit" value="Đặt Hàng" class="checkout-button button" name="send_order_place">

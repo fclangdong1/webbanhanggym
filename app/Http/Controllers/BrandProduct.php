@@ -16,14 +16,27 @@ use Illuminate\Support\Facades\Redirect;
 
 class BrandProduct extends Controller
 {
+    public function AuthLogin()
+    {
+        $admin_id = Session::get('id_users');
+        // Session::get('id_role');
+        $admin_role = Session::get('id_role');
+        if ($admin_role == 1) {
+            return Redirect::to('dashboard');
+        } else {
+            return Redirect::to('trang-chu')->send();
+        }
+    }
     // them thuong hieu
     public function add_brand_product()
     {
+        $this->AuthLogin();
         return view('pages.admin.add_brand_product');
     }
     // liet ke danh muc san pham
     public function all_brand_product()
     {
+        // $this->AuthLogin();
         $all_brand_product = DB::table('brand')->get();
         $manager_brand_product = view('pages.admin.all_brand_product')->with('all_brand_product', $all_brand_product);
         return view('admin_layout')->with('pages.admin.all_brand_product', $manager_brand_product);
@@ -31,7 +44,23 @@ class BrandProduct extends Controller
     // thêm  thương hiệu
     public function save_brand_product(Request $request)
     {
+        $this->AuthLogin();
         $data = array();
+        $this->validate(
+            $request,
+            [
+                'brand_product_name' => 'required',
+                'brand_product_slug' => 'required',
+                'brand_product_desc' => 'required',
+
+            ],
+            [
+                'brand_product_name.required' => 'Vui lòng nhập thông tin',
+                'brand_product_slug.required' => 'Vui lòng nhập thông tin',
+                'brand_product_desc.required' => 'Vui lòng nhập thông tin',
+
+            ]
+        );
         $data['brand_name'] = $request->brand_product_name;
         $data['brand_slug'] = $request->brand_product_slug;
         $data['brand_desc'] = $request->brand_product_desc;
@@ -43,12 +72,14 @@ class BrandProduct extends Controller
     // active  thương hiệu
     public function unactive_brand_product($brand_product_id)
     {
+        $this->AuthLogin();
         DB::table('brand')->where('id_brand', $brand_product_id)->update(['brand_status' => 1]);
         Session::put('message', 'Không kích hoạt');
         return Redirect::to('all-brand-product');
     }
     public function active_brand_product($brand_product_id)
     {
+        $this->AuthLogin();
         DB::table('brand')->where('id_brand', $brand_product_id)->update(['brand_status' => 0]);
         Session::put('message', 'Kích hoạt thành công');
         return Redirect::to('all-brand-product');
@@ -56,6 +87,7 @@ class BrandProduct extends Controller
     // sửa  thương hiệu
     public function edit_brand_product($brand_product_id)
     {
+        $this->AuthLogin();
         $edit_brand_product = DB::table('brand')->where('id_brand', $brand_product_id)->get();
         $manager_brand_product = view('pages.admin.edit_brand_product')->with('edit_brand_product', $edit_brand_product);
         return view('admin_layout')->with('pages.admin.all_brand_product', $manager_brand_product);
@@ -63,6 +95,7 @@ class BrandProduct extends Controller
     //update
     public function update_brand_product(Request $request, $brand_product_id)
     {
+        $this->AuthLogin();
         $data = array();
         $data['brand_name'] = $request->brand_product_name;
         $data['brand_slug'] = $request->brand_product_slug;
@@ -75,6 +108,7 @@ class BrandProduct extends Controller
     // xóa  thương hiệu
     public function delete_brand_product($brand_product_id)
     {
+        $this->AuthLogin();
         DB::table('brand')->where('id_brand', $brand_product_id)->delete();
         Session::put('message', 'Xóa  thành công');
         return Redirect::to('all-brand-product');
@@ -82,6 +116,7 @@ class BrandProduct extends Controller
     // show function thuong hiệu san pham
     public function show_brand_home($brand_id)
     {
+
         $cate_product = DB::table('type_products')->where('status', '0')->orderby('id_type', 'desc')->get();
         $brand_product = DB::table('brand')->where('brand_status', '0')->orderby('id_brand', 'desc')->get();
         $show_brand_id = DB::table('products')->join('brand', 'products.id_brand', '=', 'brand.id_brand')->where('products.id_brand', $brand_id)->get();

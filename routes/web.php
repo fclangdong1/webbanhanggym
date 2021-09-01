@@ -26,10 +26,20 @@ Route::post('/tim-kiem', [
 	'as' => '/tim-kiem',
 	'uses' => 'App\Http\Controllers\HomeController@search'
 ]);
+// tìm kiếm product admin
+Route::post('/search-product', [
+	'as' => '/search-product',
+	'uses' => 'App\Http\Controllers\HomeController@search_product'
+]);
+
+Route::post('/search-brand', [
+	'as' => '/search-brand',
+	'uses' => 'App\Http\Controllers\HomeController@search_brand'
+]);
 // DANH MỤC SẢN PHẨM TRANG-CHU
 Route::get('danh-muc-san-pham/{category_type_id}', [
 	'as' => 'danh-muc-san-pham/{category_type_id}',
-	'uses' => 'App\Http\Controllers\AdminController@show_category_home'
+	'uses' => 'App\Http\Controllers\CheckoutController@show_category_home'
 ]);
 //Danh mục thương hiệu
 Route::get('thuong-hieu/{brand_id}', [
@@ -58,6 +68,32 @@ Route::get('logout', [
 	'as' => 'logout',
 	'uses' => 'App\Http\Controllers\AdminController@logout'
 ]);
+// show users
+Route::get('all-users', [
+	'as' => 'all-users',
+	'uses' => 'App\Http\Controllers\AdminController@all_users'
+]);
+// chuyển quyền khách hàng thành nhân viên
+
+Route::get('impersonate/{id_users}', [
+	'as' => 'impersonate/{id_users}',
+	'uses' => 'App\Http\Controllers\AdminController@impersonate'
+]);
+// Thống kê doanh thu admin
+Route::post('filter-by-date', [
+	'as' => 'filter-by-date',
+	'uses' => 'App\Http\Controllers\AdminController@filter_by_date'
+]);
+// Thống kê doanh thu admin 30  ngày
+Route::post('days-order', [
+	'as' => 'days-order',
+	'uses' => 'App\Http\Controllers\AdminController@days_order'
+]);
+Route::post('dashboard-filter', [
+	'as' => 'dashboard-filter',
+	'uses' => 'App\Http\Controllers\AdminController@dashboard_filter'
+]);
+
 // danh mục sản phẩm Category Products 
 Route::get('add-category-product', [
 	'as' => 'add-category-product',
@@ -251,6 +287,12 @@ Route::post('update-user', [
 Route::post('changPassword', [
 	'as' => 'changPassword',
 	'uses' => 'App\Http\Controllers\UserController@changPassword'
+
+]);
+// chi tiết đơn hàng cho khách hàng
+Route::get('view-order-user/{orderId}', [
+	'as' => 'view-order-user/{orderId}',
+	'uses' => 'App\Http\Controllers\UserController@view_order_user'
 ]);
 // Check out thanh toan
 // Route::get('login-checkout', [

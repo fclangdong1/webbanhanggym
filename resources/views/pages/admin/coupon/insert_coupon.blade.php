@@ -21,22 +21,37 @@
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tên mã giảm giá</label>
                             <input type="text" name="coupon_name" class="form-control" id="exampleInputEmail1">
+                            @if ($errors->has('coupon_name'))
+                            <span style="color: red; font-weight: 700;">{{$errors->first('coupon_name')}}</span>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Ngày bắt đầu</label>
-                            <input type="date" name="coupon_date_start" class="form-control" id="start_coupon">
+                            <input type="date" name="coupon_date_start" class="form-control date_coupon" id="start_coupon">
+                            @if ($errors->has('coupon_date_start'))
+                            <span style="color: red; font-weight: 700;">{{$errors->first('coupon_date_start')}}</span>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Ngày kết thúc</label>
                             <input type="date" name="coupon_date_end" class="form-control" id="end_coupon">
+                            @if ($errors->has('coupon_date_end'))
+                            <span style="color: red; font-weight: 700;">{{$errors->first('coupon_date_end')}}</span>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Mã giảm giá</label>
                             <input type="text" name="coupon_code" class="form-control" id="exampleInputEmail1">
+                            @if ($errors->has('coupon_code'))
+                            <span style="color: red; font-weight: 700;">{{$errors->first('coupon_code')}}</span>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Số lượng mã</label>
-                            <input type="text" name="coupon_time" class="form-control" id="exampleInputEmail1">
+                            <input type="number" name="coupon_time" class="form-control" id="exampleInputEmail1">
+                            @if ($errors->has('coupon_time'))
+                            <span style="color: red; font-weight: 700;">{{$errors->first('coupon_time')}}</span>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Tính năng mã</label>
@@ -49,7 +64,10 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Nhập số % hoặc tiền giảm</label>
-                            <input type="text" name="coupon_number" class="form-control" id="exampleInputEmail1">
+                            <input type="number" name="coupon_number" class="form-control" id="exampleInputEmail1">
+                            @if ($errors->has('coupon_number'))
+                            <span style="color: red; font-weight: 700;">{{$errors->first('coupon_number')}}</span>
+                            @endif
                         </div>
 
 

@@ -20,12 +20,32 @@ class CouponController extends Controller
     public function list_coupon()
     {
         $today = Carbon::now('Asia/Ho_Chi_Minh')->toDateString('Y/m/d');
-        $coupon = Coupon::orderby('id_coupon', 'DESC')->paginate(5);
+        $coupon = Coupon::orderby('coupon_date_start', 'DESC')->paginate(5);
         return view('pages.admin.coupon.list_coupon')->with(compact('coupon', 'today'));
     }
     public function insert_coupon_code(Request $request)
     {
         $data = $request->all();
+        $this->validate(
+            $request,
+            [
+                'coupon_name' => 'required',
+                'coupon_date_start' => 'required',
+                'coupon_date_end' => 'required',
+                'coupon_number' => 'required',
+                'coupon_code' => 'required|unique:coupon,coupon_code',
+                'coupon_time' => 'required',
+            ],
+            [
+                'coupon_name.required' => 'Nhập Tên Mã Giảm Giá',
+                'coupon_date_start.required' => 'Nhập Thời Gian Bắt Đầu',
+                'coupon_date_end.required' => 'Nhập Thời Gian Kết Thúc',
+                'coupon_number.required' => 'Nhập Số Tiền Hoặc Phần Trăm',
+                'coupon_code.required' => 'Vui lòng nhập Mã Giảm Giá',
+                'coupon_code.unique' => 'Mã Giảm Giá Đã Tồn Tại',
+                'coupon_time.required' => 'Nhập Số Lượng Mã',
+            ]
+        );
         $coupon = new Coupon;
 
         $coupon->coupon_name = $data['coupon_name'];

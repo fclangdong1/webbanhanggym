@@ -45,9 +45,9 @@
                                 <input type="checkbox"><i></i>
                             </label>
                         </th>
-                        <th style="width:140px;">Tên thương hiệu</th>
+                        <th>Tên thương hiệu</th>
                         <th>Brand Slug</th>
-                        <th style="width:140px;">Mô Tả Thương Hiệu</th>
+                        <th>Mô Tả Thương Hiệu</th>
                         <th>Hiển thị</th>
 
                         <th style="width:30px;"></th>

@@ -33,6 +33,7 @@ class ProductController extends Controller
     }
     public function send_comment(Request $request)
     {
+
         $product_id = $request->product_id;
         $comment_name = $request->comment_name;
         $comment_content = $request->comment_content;
@@ -65,7 +66,7 @@ class ProductController extends Controller
                     <p class="comment"> <b>Bình luận :</b> 
                     ' . $comm->comment . '
                     </p>
-                    <p class="response"> <b>Trả Lời :</b> .....</p>
+                   
                 </div>
             </div>
             ';
@@ -75,6 +76,7 @@ class ProductController extends Controller
     // add sản phẩm
     public function add_product()
     {
+        $this->AuthLogin();
         $cate_product = DB::table('type_products')->orderby('id_type', 'desc')->get();
         $brand_product = DB::table('brand')->orderby('id_brand', 'desc')->get();
         return view('pages.admin.add_product')->with('cate_product', $cate_product)->with('brand_product', $brand_product);
@@ -94,7 +96,30 @@ class ProductController extends Controller
     public function save_product(Request $request)
     {
 
+        $this->AuthLogin();
         $data = array();
+        $this->validate(
+            $request,
+            [
+                'product_name' => 'required',
+                'product_quantity' => 'required',
+                'product_slug' => 'required',
+                'product_price' => 'required',
+                'product_desc' => 'required',
+                'product_content' => 'required',
+                'product_status' => 'required',
+            ],
+            [
+                'product_name.required' => 'Vui lòng nhập thông tin',
+                'product_quantity.required' => 'Vui lòng nhập thông tin',
+                'product_slug.required' => 'Vui lòng nhập thông tin',
+                'product_price.required' => 'Vui lòng nhập thông tin',
+                'product_desc.required' => 'Vui lòng nhập thông tin',
+                'product_content.required' => 'Vui lòng nhập thông tin',
+                'product_status.required' => 'Vui lòng nhập thông tin',
+
+            ]
+        );
         $data['product_name'] = $request->product_name;
         $data['product_quantity'] = $request->product_quantity;
         $data['product_slug'] = $request->product_slug;

@@ -21,18 +21,30 @@
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tên sản phẩm</label>
                             <input type="text" data-validation="length" data-validation-length="min10" data-validation-error-msg="Làm ơn điền ít nhất 10 ký tự" name="product_name" class="form-control " id="slug" placeholder="Tên danh mục" onkeyup="ChangeToSlug();">
+                            @if ($errors->has('product_name'))
+                            <span style="color: red; font-weight: 700;">{{$errors->first('product_name')}}</span>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">SL sản phẩm</label>
                             <input type="number" data-validation="number" data-validation-error-msg="Làm ơn điền số lượng" name="product_quantity" class="form-control" id="exampleInputEmail1" placeholder="Điền số lượng">
+                            @if ($errors->has('product_quantity'))
+                            <span style="color: red; font-weight: 700;">{{$errors->first('product_quantity')}}</span>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Slug</label>
                             <input type="text" name="product_slug" class="form-control " id="convert_slug" placeholder="Tên danh mục">
+                            @if ($errors->has('product_slug'))
+                            <span style="color: red; font-weight: 700;">{{$errors->first('product_slug')}}</span>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Giá bán</label>
                             <input type="number" data-validation="length" data-validation-length="min5" data-validation-error-msg="Làm ơn điền số tiền" name="product_price" class="form-control price_format" id="" placeholder="Tên danh mục">
+                            @if ($errors->has('product_price'))
+                            <span style="color: red; font-weight: 700;">{{$errors->first('product_price')}}</span>
+                            @endif
                         </div>
                         <!-- <div class="form-group">
                             <label for="exampleInputEmail1">Giá gốc</label>
@@ -41,6 +53,9 @@
                         <div class="form-group">
                             <label for="exampleInputEmail1">Hình ảnh sản phẩm</label>
                             <input type="file" name="product_image" class="form-control" id="exampleInputEmail1">
+                            @if ($errors->has('product_image'))
+                            <span style="color: red; font-weight: 700;">{{$errors->first('product_image')}}</span>
+                            @endif
                         </div>
                         <!-- <div class="form-group">
                             <label for="exampleInputEmail1">Tài liệu</label>
@@ -49,10 +64,16 @@
                         <div class="form-group">
                             <label for="exampleInputPassword1">Mô tả sản phẩm</label>
                             <textarea style="resize: none" rows="8" class="form-control" name="product_desc" id="ckeditor1" placeholder="Mô tả sản phẩm"></textarea>
+                            @if ($errors->has('product_desc'))
+                            <span style="color: red; font-weight: 700;">{{$errors->first('product_desc')}}</span>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Nội dung sản phẩm</label>
                             <textarea style="resize: none" rows="8" class="form-control" name="product_content" id="id4" placeholder="Nội dung sản phẩm"></textarea>
+                            @if ($errors->has('product_content'))
+                            <span style="color: red; font-weight: 700;">{{$errors->first('product_content')}}</span>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Danh mục sản phẩm</label>

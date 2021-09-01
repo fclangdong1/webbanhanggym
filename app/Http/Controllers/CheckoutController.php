@@ -30,10 +30,11 @@ class CheckoutController extends Controller
     public function AuthLogin()
     {
         $admin_id = Session::get('id_users');
+
         if ($admin_id != null) {
             return Redirect::to('dashboard');
         } else {
-            return Redirect::to('admin')->send();
+            return Redirect::to('trang-chu')->send();
         }
     }
     public function login_checkout()
@@ -100,6 +101,7 @@ class CheckoutController extends Controller
     public function checkout(Request $Request)
     {
 
+        $this->AuthLogin();
         $data['id_users'] = Session::get('id_users');
         $all_user = DB::table('users')->where('id_users', $data['id_users'])->get();
         $cart = Session::get('cart');
@@ -113,6 +115,7 @@ class CheckoutController extends Controller
     }
     public function save_checkout_customer(Request $Request)
     {
+        $this->AuthLogin();
         $this->validate(
             $Request,
             [
@@ -150,6 +153,7 @@ class CheckoutController extends Controller
     }
     public function payment()
     {
+        $this->AuthLogin();
         $data['id_shipping'] = Session::get('id_shipping');
 
         $id_shipping = DB::table('shipping')->where('id_shipping', $data['id_shipping'])->get();
@@ -159,6 +163,7 @@ class CheckoutController extends Controller
     }
     public function order_place(Request $Request)
     {
+        $this->AuthLogin();
         //        insert payment
         $data = array();
 
@@ -166,16 +171,17 @@ class CheckoutController extends Controller
         $data['payment_status'] = 'Đang chờ xử lý';
         $data['id_order'] = Session::get('id_order');
         $payment_id = DB::table('payments')->insertGetId($data);
-        // dd($Request->payment_option);
+
         //insert order
         $checkout_code = substr(md5(microtime()), rand(0, 26), 5);
         $order = new Order;
         $order->id_users = Session::get('id_users');
         $order->id_shipping =  Session::get('id_shipping');
-        $order->payment_id = $payment_id;;
+        $order->payment_id = $payment_id;
+        $today = Carbon::now('Asia/Ho_Chi_Minh')->toDateString('Y/m/d');
         $order->order_status = 1;
-
-        $order->order_total = $Request->order_total;
+        $order->order_date = $today;
+        $order->order_total = str_replace('.', '', $Request->order_total);
         $order->order_code = $checkout_code;
         $order->save();
         Session::put('id_order', $order->id_order);
@@ -216,22 +222,28 @@ class CheckoutController extends Controller
                 $order_details->save();
             }
         }
-        $coupon_code = Session::get('coupon_code');
+        // $coupon_code = Session::get('coupon_code');
 
-        if ($coupon_code == true) {
-            Session::forget('coupon_code');
-            return redirect()->back()->with('mesage', 'Xóa mã thành công');
-        }
+        // if ($coupon_code == true) {
+        //     Session::forget('coupon_code');
+        //     return redirect()->back()->with('mesage', 'Xóa mã thành công');
+        // }
         if ($data['payment_method'] == 1) {
 
             Session::forget('cart');
-
+            Session::forget('coupon_code');
             $cate_product = DB::table('type_products')->where('status', '0')->orderby('id_type', 'desc')->get();
             $brand_product = DB::table('brand')->where('brand_status', '0')->orderby('id_brand', 'desc')->get();
             return view('pages.checkout.handcash')->with('category', $cate_product)->with('brand', $brand_product);
+        } elseif ($data['payment_method'] == 0) {
+            Session::put('message', 'Vui Lòng chọn phương thức thanh toán');
+            return Redirect::to('/payment');
         } else {
             Session::forget('cart');
-            echo 'Thanh toán VNPAY';
+            Session::forget('coupon_code');
+            $cate_product = DB::table('type_products')->where('status', '0')->orderby('id_type', 'desc')->get();
+            $brand_product = DB::table('brand')->where('brand_status', '0')->orderby('id_brand', 'desc')->get();
+            return view('pages.checkout.handcash')->with('category', $cate_product)->with('brand', $brand_product);
         }
     }
 
@@ -267,9 +279,11 @@ class CheckoutController extends Controller
             if ($result->id_role == 1) {
                 Session::put('id_users', $result->id_users);
                 Session::put('fullname', $result->fullname);
+                Session::put('id_role', $result->id_role);
                 return Redirect::to('/dashboard');
             } else {
                 Session::put('id_users', $result->id_users);
+                Session::put('id_role', $result->id_role);
                 return Redirect::to('/trang-chu');
             }
         } else {
@@ -300,11 +314,20 @@ class CheckoutController extends Controller
             ->join('order_details', 'order.id_order', '=', 'order_details.id_orders')
             ->select('order.*', 'users.*', 'shipping.*', 'order_details.*')->get();
         $manager_order_by_id  = view('pages.admin.view_order')->with('order_by_id', $order_by_id);
-        // dd($order_by_id);
-        // dd($order_by_id);
+
         return view('admin_layout')->with('pages.admin.view_order', $manager_order_by_id);
 
 
         // return view('pages.admin.view_order');
+    }
+    // show function danh muc san pham
+    public function show_category_home($category_type_id)
+    {
+
+        $cate_product = DB::table('type_products')->where('status', '0')->orderby('id_type', 'desc')->get();
+        $brand_product = DB::table('brand')->where('brand_status', '0')->orderby('id_brand', 'desc')->get();
+        $category_by_id = DB::table('products')->join('type_products', 'products.id_type', '=', 'type_products.id_type')->where('products.id_type', $category_type_id)->get();
+        $category_name = DB::table('type_products')->where('type_products.id_type', $category_type_id)->limit(1)->get();
+        return view('pages.category.show_category')->with('category', $cate_product)->with('brand', $brand_product)->with('category_by_id', $category_by_id)->with('category_name', $category_name);
     }
 }

@@ -53,6 +53,7 @@
         var order_code = id;
         var lydo = $('.lydohuydon').val();
         var _token = $('input[name="_token"]').val();
+
         $.ajax({
             url: "{{url('/huy-don-hang')}}",
             method: "POST",
@@ -69,6 +70,8 @@
         });
     }
 </script>
+<!-- //đặt hàng -->
+
 <!-- ajax bình luận -->
 <script type="text/javascript">
     $(document).ready(function() {
@@ -129,11 +132,12 @@
             var cart_product_price = $('.cart_product_price_' + id).val();
             var cart_product_qty = $('.cart_product_qty_' + id).val();
             var _token = $('input[name="_token"]').val();
+            // alert(cart_product_qty);
             if (parseInt(cart_product_quantity) == 0) {
 
                 alert('Sản Phẩm tạm thời hết hàng');
             } else if (parseInt(cart_product_qty) > parseInt(cart_product_quantity)) {
-                alert('Làm ơn đặt nhỏ hơn ' + cart_product_quantity);
+                alert('Làm ơn đặt nhỏ hơn hoặc bằng ' + cart_product_quantity);
             } else {
 
                 $.ajax({
@@ -203,7 +207,35 @@
             });
         }
     }).render('#paypal-button-container');
+
     //This function displays Smart Payment Buttons on your web page.
+    // $.ajax({
+    //     url: "{{url('/order-place')}}",
+    //     method: 'POST',
+    //     data: {
+
+    //     },
+    //     success: function() {
+    //         // alert(data);
+    //         // swal("Hello world!");
+
+    //         swal({
+    //                 title: "Đã thêm sản phẩm vào giỏ hàng",
+    //                 text: "Bạn có thể mua hàng tiếp hoặc tới giỏ hàng để tiến hành thanh toán",
+    //                 showCancelButton: true,
+    //                 cancelButtonClass: "btn-success",
+    //                 cancelButtonText: "Xem tiếp",
+    //                 confirmButtonClass: "btn-success",
+    //                 confirmButtonText: "Đi đến giỏ hàng",
+    //                 closeOnConfirm: false
+    //             },
+    //             function() {
+    //                 window.location.href = "{{url('/gio-hang')}}";
+    //             });
+
+    //     }
+
+    // });
 </script>
 
 </html>

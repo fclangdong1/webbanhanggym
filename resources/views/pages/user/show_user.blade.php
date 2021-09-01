@@ -99,9 +99,10 @@
                                             $i++;
                                             @endphp
                                             <tr>
+
                                                 <td><i>{{$i}}</i></label></td>
                                                 <td>{{$history_order->order_code}}</td>
-                                                <td>{{$history_order->order_total}}</td>
+                                                <td>{{number_format($history_order->order_total,0,',','.')}}</td>
 
                                                 @if($history_order->order_status == 1)
                                                 <td>Đơn Hàng Mới</td>
@@ -116,37 +117,29 @@
                                                 @endif
                                                 <td>{{$history_order->order_date}}</td>
                                                 <td class="flex">
-                                                    <button style="width:9rem; margin-bottom: 0.5rem;" class="btn btn-success">Xem Đơn
-                                                        Hàng</button>
+                                                    <button style="width:9rem; margin-bottom: 0.5rem;" class="btn btn-success"><a style="color: white;" href="{{URL::to('/view-order-user/'.$history_order->id_order)}}">Xem Đơn Hàng</a></button>
                                                     @if($history_order->order_status == 1)
-                                                    <button type="button" style="width:9rem;" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
-                                                        Hủy Đơn Hàng
-                                                    </button>
-
+                                                    <button type="button" style="width:9rem;" class="btn btn-danger" data-toggle="modal" data-target="#Huyhang+{{$history_order->order_code}}"> Hủy Đơn Hàng</button>
                                                     <!-- The Modal -->
-                                                    <div class="modal" id="myModal">
+                                                    <div class="modal" id="Huyhang+{{$history_order->order_code}}">
                                                         <div class="modal-dialog">
-                                                            <form>
+                                                            <form id="{{$history_order->order_code}}">
                                                                 @csrf
                                                                 <div class="modal-content">
-
                                                                     <!-- Modal Header -->
                                                                     <div class="modal-header">
                                                                         <h4 class="modal-title">Lý Do Hủy Đơn Hàng</h4>
                                                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                                     </div>
-
                                                                     <!-- Modal body -->
                                                                     <div class="modal-body">
                                                                         <p><textarea name="lydo" style="padding-left: 1rem;" class="lydohuydon" require placeholder="Lý do hủy đơn hàng..." rows="4" cols="55"></textarea></p>
                                                                     </div>
-
                                                                     <!-- Modal footer -->
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
                                                                         <button type="button" id="{{$history_order->order_code}}" onclick="Huydonhang(this.id)" class="btn btn-success">Gửi</button>
                                                                     </div>
-
                                                                 </div>
                                                             </form>
                                                         </div>

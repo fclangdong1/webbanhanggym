@@ -21,14 +21,23 @@
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tên thương hiệu</label>
                             <input type="text" name="brand_product_name" class="form-control" onkeyup="ChangeToSlug();" id="slug" placeholder="Tên danh mục">
+                            @if ($errors->has('brand_product_name'))
+                            <span style="color: red; font-weight: 700;">{{$errors->first('brand_product_name')}}</span>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Slug</label>
                             <input type="text" name="brand_product_slug" class="form-control" id="convert_slug" placeholder="Slug">
+                            @if ($errors->has('brand_product_slug'))
+                            <span style="color: red; font-weight: 700;">{{$errors->first('brand_product_slug')}}</span>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Mô tả thương hiệu</label>
                             <textarea style="resize: none" rows="8" class="form-control" name="brand_product_desc" id="exampleInputPassword1" placeholder="Mô tả danh mục"></textarea>
+                            @if ($errors->has('brand_product_desc'))
+                            <span style="color: red; font-weight: 700;">{{$errors->first('brand_product_desc')}}</span>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Hiển thị</label>

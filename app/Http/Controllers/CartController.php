@@ -19,6 +19,15 @@ use Illuminate\Support\Facades\Redirect;
 
 class CartController extends Controller
 {
+    public function AuthLogin()
+    {
+        $admin_id = Session::get('id_users');
+        if ($admin_id != null) {
+            return Redirect::to('dashboard');
+        } else {
+            return Redirect::to('login-checkout')->send();
+        }
+    }
     // gio hang
     public function gio_hang(Request $request)
     {
@@ -44,10 +53,16 @@ class CartController extends Controller
                         'id_products' => $data['cart_product_id'],
                         'product_image' => $data['cart_product_image'],
                         'product_quantity' => $data['cart_product_quantity'],
-                        'product_qty' => $data['cart_product_qty'],
+                        'product_qty' => $val['product_qty'] + $data['cart_product_qty'],
                         'product_price' => $data['cart_product_price'],
                     );
-                    Session::put('cart', $cart);
+                    if ($cart[$key]['product_quantity'] >= $cart[$key]['product_qty']) {
+                        Session::put('cart', $cart);
+                    } else {
+                        alert('Làm ơn đặt nhỏ hơn hoặc bằng ' + $cart[$key]['product_quantity']);
+                    }
+
+                    // Session::put('cart', $cart);
                 }
             }
             if ($is_avaiable == 0) {
@@ -164,7 +179,7 @@ class CartController extends Controller
         $today = Carbon::now('Asia/Ho_Chi_Minh')->toDateString('Y/m/d');
         $data = $request->all();
         if (Session::get('id_users')) {
-            $coupon = Coupon::where('coupon_code', $data['coupon_code'])->where('coupon_status', 1)->where('coupon_date_end', '>=', $today)->where('coupon_used', 'LIKE', '%' . Session::get('id_users') . '%')->first();
+            $coupon = Coupon::where('coupon_code', $data['coupon_code'])->where('coupon_status', 1)->where('coupon_date_end', '>=', $today)->where('coupon_user', 'LIKE', '%' . Session::get('id_users') . '%')->first();
             if ($coupon) {
                 return redirect()->back()->with('error', 'Mã giảm giá đã sử dụng,vui lòng nhập mã khác');
             } else {

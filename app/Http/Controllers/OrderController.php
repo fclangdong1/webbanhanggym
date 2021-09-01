@@ -12,6 +12,7 @@ use App\CatePost;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetails;
+use App\Models\Products;
 use App\Models\Shipping;
 use Cart;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -37,8 +38,19 @@ class OrderController extends Controller
     {
         $data = $Request->all();
         $orderh = Order::where('order_code', $data['order_code'])->first();
+        $order_details = OrderDetails::where('orders_code', $data['order_code'])->get();
+
+        foreach ($order_details as $key => $details) {
+            $product_details = Products::where('id_products', $details['id_products'])->first();
+            $new_quantity =  $product_details->product_quantity + $details['product_quantity'];
+            $product_details->product_quantity = $new_quantity;
+            $product_details->save();
+        }
+
+
         $orderh->order_destroy = $data['lydo'];
         $orderh->order_status = 5;
+
         $orderh->save();
     }
 }
